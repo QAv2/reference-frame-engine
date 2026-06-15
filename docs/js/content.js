@@ -56,39 +56,41 @@ export const COMPONENT_INFO = {
     rigorNote: 'Force ratio from simulator exp 20. Region is real physics, visualization is schematic.',
   },
   coil_z: {
-    name: 'Z-Axis Coils (Blue)',
-    role: 'Outermost coil pair. Generates vertical B-field component through mercury. Offset along Z-axis.',
+    name: 'Z-Axis Helmholtz Pair (Blue)',
+    role: 'Outermost Helmholtz pair \u2014 two coaxial coils spaced at their radius (z = \u00B111.25 cm = \u00B1R/2). The Helmholtz condition gives a uniform vertical B-field through the mercury.',
     params: [
       'R = 22.5 cm',
-      '4-6 turns, 4 AWG copper',
-      'Offset: 16 cm from center',
-      'B at center: 0.006\u20130.091 mT (10\u2013100 A)',
+      'Helmholtz pair: coils at z = \u00B111.25 cm',
+      '4-6 turns/coil, 4 AWG copper',
+      'B at center: 2.4 mT (N=6, I=100 A)',
     ],
     rigor: 'verified',
-    rigorNote: 'Biot-Savart: B = \u03BC\u2080NIR\u00B2/(2(R\u00B2+d\u00B2)^(3/2))',
+    rigorNote: 'Helmholtz: B = (4/5)^(3/2) \u00D7 \u03BC\u2080NI/R \u2248 0.716 \u03BC\u2080NI/R',
   },
   coil_y: {
-    name: 'Y-Axis Coils (Green)',
-    role: 'Middle coil pair. Generates Y-component of the three-axis field. Nested inside Z-axis coils.',
+    name: 'Y-Axis Helmholtz Pair (Green)',
+    role: 'Middle Helmholtz pair (y = \u00B19 cm = \u00B1R/2). Generates the Y-component of the three-axis field. Nested inside the Z pair.',
     params: [
       'R = 18.0 cm',
-      '4-6 turns, 4 AWG copper',
-      'Offset: 16 cm from center',
+      'Helmholtz pair: coils at y = \u00B19 cm',
+      '4-6 turns/coil, 4 AWG copper',
+      'B at center: 3.0 mT (N=6, I=100 A)',
     ],
     rigor: 'verified',
-    rigorNote: 'Same Biot-Savart calculation applies',
+    rigorNote: 'Same Helmholtz formula; uniform central field per axis',
   },
   coil_x: {
-    name: 'X-Axis Coils (Red)',
-    role: 'Innermost coil pair. Generates X-component. Together with Y and Z, creates full 3D field — the key architectural feature.',
+    name: 'X-Axis Helmholtz Pair (Red)',
+    role: 'Innermost Helmholtz pair (x = \u00B17 cm = \u00B1R/2). Generates the X-component. Together with Y and Z, creates the full 3D field \u2014 the key architectural feature.',
     params: [
       'R = 14.0 cm',
-      '4-6 turns, 4 AWG copper',
-      'Offset: 16 cm from center',
-      'Max 3-axis combined B: ~0.16 mT',
+      'Helmholtz pair: coils at x = \u00B17 cm',
+      '4-6 turns/coil, 4 AWG copper',
+      'B at center: 3.9 mT (N=6, I=100 A)',
+      'Max 3-axis combined: ~5.5 mT',
     ],
     rigor: 'verified',
-    rigorNote: 'Max B = \u221A3 \u00D7 single-axis max',
+    rigorNote: 'Combined B = \u221A(Bx\u00B2 + By\u00B2 + Bz\u00B2) for orthogonal pairs',
   },
   axes: {
     name: 'Reference Axes',
@@ -132,17 +134,50 @@ export const DOC_SECTIONS = [
   <tr><th>Earth</th><th>Device</th></tr>
   <tr><td>Solid iron inner core</td><td>Lead sphere (r=0.8 cm)</td></tr>
   <tr><td>Liquid iron outer core</td><td>Liquid mercury (R=5.0 cm sphere)</td></tr>
-  <tr><td>Geomagnetic field (self-generated)</td><td>Three orthogonal EM coils (applied)</td></tr>
+  <tr><td>Geomagnetic field (self-generated)</td><td>Three orthogonal Helmholtz coil pairs (applied)</td></tr>
   <tr><td>Core convection + rotation</td><td>AC-driven eddy currents + Lorentz force</td></tr>
 </table>
 
-<p><strong>Operating principle</strong> (no exotic theory required): Three orthogonal AC coils generate time-varying B-fields inside a sealed ceramic sphere filled with liquid mercury. The mercury develops eddy currents (Faraday induction) that couple to the fields via Lorentz force (J \u00D7 B). A lead core, denser than mercury, settles at an equilibrium determined by the balance between gravitational buoyancy and magnetic pressure. The three-axis field drives structured 3D flow in the mercury around the core.</p>
+<p><strong>Operating principle</strong> (no exotic theory required): Three orthogonal AC Helmholtz coil pairs generate time-varying B-fields inside a sealed ceramic sphere filled with liquid mercury. The mercury develops eddy currents (Faraday induction) that couple to the fields via Lorentz force (J \u00D7 B). A lead core, denser than mercury, settles at an equilibrium determined by the balance between gravitational buoyancy and magnetic pressure. The three-axis field drives structured 3D flow in the mercury around the core.</p>
 
 <p><strong>Why three axes?</strong> A single axis drives 2D circulation. Two axes create a more complex pattern but still constrained. Three orthogonal axes — the minimum for full spatial coverage — allow the field to address every direction in 3D space. The simulator confirms: plasma Q<sub>3d</sub> \u2248 1.0 for three-axis drive, vs. 0.003 for single-axis. <span class="rigor-tag rigor-model">Model</span></p>
+
+<p><strong>Why Helmholtz pairs?</strong> Each axis is a <em>Helmholtz pair</em> — two coaxial coils spaced at exactly their radius (coils at ±R/2) — the standard laboratory geometry for a uniform field through the working volume (<a href="https://www.pnisensor.com/helmholtz-coil-design-applications-and-impact/" target="_blank" rel="noopener">PNI: Helmholtz Coil Design, Applications &amp; Impact</a>). At N=6 turns and 100 A this yields 2.4–3.9 mT per axis (X strongest, innermost), ~5.5 mT combined. <span class="rigor-tag rigor-verified">Verified</span></p>
 
 <p><strong>Why lead?</strong> Lead is the densest common element that floats in mercury (\u03C1<sub>Pb</sub> = 11,340 vs. \u03C1<sub>Hg</sub> = 13,534 kg/m\u00B3). It's also a superconductor below 7.2 K — relevant for the cryo-dynamo pathway. <span class="rigor-tag rigor-verified">Verified</span></p>
 
 <p><strong>Why mercury?</strong> Highest room-temperature \u03C3 of any liquid metal (1.04 \u00D7 10\u2076 S/m). Also a superconductor — the first ever discovered (Kamerlingh Onnes, 1911, T\u1D04 = 4.15 K). Eddy-current coupling peaks at f<sub>d</sub> = 48.7 Hz for the 5 cm sphere. <span class="rigor-tag rigor-verified">Verified</span></p>
+    `,
+  },
+  {
+    title: 'The Reciprocal System Lineage',
+    open: false,
+    body: `
+<p><em>Where the theoretical framework comes from.</em> The device tests a quaternion mapping (next section) — but that mapping didn't appear from nowhere. It descends from a 70-year lineage of reciprocal and suppressed physics. This is the paper trail, sourced at every step.</p>
+
+<table>
+  <tr><th>Stage</th><th>Who</th><th>What</th></tr>
+  <tr><td>The Reciprocal System</td><td>Dewey Larson · 1959–1990</td><td>Physics from two postulates; 3D time</td></tr>
+  <tr><td>RS2 reevaluation</td><td>Peret &amp; Nehru · from 1991</td><td>Quaternions + projective geometry</td></tr>
+  <tr><td>The split</td><td>Satz · Bundy · RS2 · 2006–2016</td><td>Three factions; RS2 dominant</td></tr>
+  <tr><td>The Sanctuary</td><td>Antiquatis → Salt Lake City</td><td>Community; Vanhorn under Peret</td></tr>
+  <tr><td>Qualia Algebra</td><td>Vanhorn · 2025</td><td>Same architecture from "I exist"</td></tr>
+  <tr><td>Classified convergence</td><td>AAWSAP · 2007–2012</td><td>38 DIRDs, same physics domains</td></tr>
+</table>
+
+<p><strong>1 · The Reciprocal System.</strong> Dewey B. Larson (1898–1990) derived the periodic table, stellar evolution sequences, and subatomic particle properties from two postulates alone — no arbitrary constants, no curve-fitting (<a href="https://reciprocalsystem.org/books" target="_blank" rel="noopener">Nothing But Motion</a>, 1979). Its central structural claim: time has three dimensions reciprocal to space. His late <em>Beyond Space and Time</em> (1995, ed. Peret) posited a non-physical third sector — consciousness as fundamental rather than emergent. The research body (ISUS, incorporated 1982; renamed RSRS 2016) has run continuously for 40+ years (<a href="https://reciprocalsystem.org/" target="_blank" rel="noopener">reciprocalsystem.org</a>).</p>
+
+<p><strong>2 · RS2 — the reevaluation.</strong> Bruce Peret and KVK Nehru rebuilt Larson's system on projective geometry and introduced <em>quaternion</em> mathematics to model its double-rotating structure (<a href="https://reciprocalsystem.org/rs2-tutorial" target="_blank" rel="noopener">RS2 Tutorial Series</a>). This is the hinge of the whole story: the quaternion algebra the device maps to enters the lineage here. Peret also published on electrogravitics — propulsion framed as manipulating gravity's scalar-motion structure.</p>
+
+<p><strong>3 · The split.</strong> The community fractured into three lines: Ronald Satz (Larson's direct mentee for 25 years, orthodox and quantitative), Douglas Bundy (founded the Larson Research Center in 2006 arguing "scalar rotation is an oxymoron" — <a href="http://www.lrcphysics.com/lrc-charter/" target="_blank" rel="noopener">LRC Charter</a>), and the Peret–Nehru RS2 reevaluation, which became the dominant ISUS direction.</p>
+
+<p><strong>4 · The Sanctuary.</strong> The Antiquatis Institute (516 members, 5,849 posts) hosted RS2 research, consciousness studies, and Peret's Sanctuary Project. A small group of individuals relocated to Salt Lake City to study directly under Peret (<a href="https://forum.antiquatis.org/" target="_blank" rel="noopener">Antiquatis fora</a>). After Peret's death in 2020, Dr. Gopi Krishna Vijaya took Director of Research for RSRS. <em>This is the node this archive descends from.</em></p>
+
+<p><strong>5 · Qualia Algebra — the parallel.</strong> Built from the single axiom "I exist," Qualia Algebra derives 3D spatial emergence, quaternion observer states, and a consciousness-first ontology — reaching RS2's architecture from a different starting point across nine structural parallels (<a href="https://doi.org/10.5281/zenodo.17685406" target="_blank" rel="noopener">QA, Zenodo</a>). Its temporal-asymmetry operator shows mathematical equivalence (r=1.000) with Friston's Free Energy Principle, and QA itself lists 28 falsifiable predictions. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> — independently derived, not yet adjudicated.</p>
+
+<p><strong>6 · The classified convergence.</strong> AAWSAP, a $22M DIA program (2007–2012), produced 38 Defense Intelligence Reference Documents on warp drives, wormholes, antigravity, and Alcubierre metrics (<a href="https://www.theblackvault.com/documentarchive/the-advanced-aerospace-weapon-system-applications-program-aawsap-documentation/" target="_blank" rel="noopener">released titles</a>) — the same physics domains the Reciprocal System addresses. Alcubierre's 1994 metric (<a href="https://arxiv.org/abs/gr-qc/0009013" target="_blank" rel="noopener">arXiv</a>) — contract space ahead, expand behind — is functionally the motion-<em>of</em>-space Larson described 35 years earlier. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> — a structural parallel, not a demonstrated identity.</p>
+
+<p><strong>The honest line.</strong> Stages 1–4 are documented intellectual history — cited above, independently checkable. Stages 5–6 are <em>convergence claims</em>: striking, falsifiable, and explicitly not yet proven. Several independent frameworks (RS, QA, knot theory, scalar fields) converge on three dimensions as a critical emergent property — which is exactly what the next section puts on the bench. Same standard as everything else here: would it survive hostile peer review?</p>
     `,
   },
   {
@@ -184,7 +219,7 @@ export const DOC_SECTIONS = [
   <tr><td>Sphere</td><td>Borosilicate glass / alumina ceramic</td><td>Insulating, Hg-resistant, vacuum-sealable</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Mercury fill</td><td>99.99% Hg, 7.03 kg</td><td>\u03C3 = 1.04\u00D710\u2076 S/m, \u03C1 = 13,534 kg/m\u00B3</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Core</td><td>99.9% Pb, 24.3 g</td><td>\u03C1 = 11,340 kg/m\u00B3, T\u1D04 = 7.2 K</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Coils (x3)</td><td>4 AWG copper, 4-6 turns</td><td>45 cm dia, 12 cm bore, 16 cm offset</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Coils (×6 — 3 Helmholtz pairs)</td><td>4 AWG copper, 4-6 turns/coil</td><td>R = 14 / 18 / 22.5 cm, each pair at ±R/2</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
 </table>
 
 <p><strong>Key parameters</strong></p>
@@ -192,8 +227,8 @@ export const DOC_SECTIONS = [
   <tr><th>Parameter</th><th>Value</th><th>Rigor</th></tr>
   <tr><td>Eddy-current peak (f<sub>d</sub>)</td><td>48.7 Hz</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Skin depth at 50 Hz</td><td>7.0 cm (> sphere R)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Max B at center (single coil, 100A)</td><td>0.091 mT</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Max B (3-axis combined)</td><td>~0.16 mT</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Max B per axis (Helmholtz pair, N=6, 100A)</td><td>3.9 mT</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Max B (3-axis combined)</td><td>~5.5 mT</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Core eq. (3-axis)</td><td>10.5 mm below center</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Core eq. (2-axis)</td><td>15.7 mm below center</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Core eq. (1-axis)</td><td>31.6 mm below center</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
@@ -207,7 +242,7 @@ export const DOC_SECTIONS = [
 
 <p><strong>What the simulator proved won't work</strong>:</p>
 <ul>
-  <li>Cyclotron resonance at bench B-fields (Larmor radius = 21 m, need ~50 mT, have ~0.091 mT) <span class="rigor-tag rigor-verified">Verified</span></li>
+  <li>Cyclotron resonance at bench B-fields (Hg⁺ Larmor radius ≈ 0.5 m ≫ sphere; need ~50 mT, have ~3.9 mT — a ~13× gap, down from ~550× for offset pancakes) <span class="rigor-tag rigor-verified">Verified</span></li>
   <li>Classical dynamo via plasma mercury (conductivity drops 150\u00D7 from liquid) <span class="rigor-tag rigor-verified">Verified</span></li>
   <li>RS frequency matching in MHD (sweeps flat without hardcoded boost) <span class="rigor-tag rigor-verified">Verified</span></li>
   <li>RS amplitude ratios affecting centering (spread < 0.012 mm = noise) <span class="rigor-tag rigor-verified">Verified</span></li>
