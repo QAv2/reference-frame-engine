@@ -104,7 +104,7 @@ export const DOC_SECTIONS = [
 
 <p>Everything here is real engineering. Every claim is tagged with its rigor category: <span class="rigor-tag rigor-verified">Verified</span> means textbook physics, independently calculable. <span class="rigor-tag rigor-model">Model</span> means simulator prediction with known limitations. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> means untested — the point of building. <span class="rigor-tag rigor-circular">Circular</span> means an assumption that was reported as a result.</p>
 
-<p class="correction-note"><strong>Corrected 14 October 2026.</strong> A re-run of the February simulator code found that three results this page called Verified were assumptions written into the code. The lead core is retired, because lead dissolves in mercury, and the cryogenic dynamo phase is retired, because mercury only superconducts when it is frozen. The corrections are made in place and listed under <em>Corrections</em> at the end.</p>
+<p class="correction-note"><strong>Corrected 14 October 2026.</strong> A re-run of the February simulator code found that four results this page called Verified were assumptions written into the code, or read back out of it. The lead core is retired, because lead dissolves in mercury, and the cryogenic dynamo phase is retired, because mercury only superconducts when it is frozen. The corrections are made in place and listed under <em>Corrections</em> at the end.</p>
 
 <p>The device exists at the intersection of magnetohydrodynamics, rotating fluids, plasma physics, and a theoretical framework (Reciprocal System / Qualia Algebra) that maps device components to quaternion algebra. Whether that mapping has physical content is <em>the question this prototype is designed to answer.</em></p>
 
@@ -273,7 +273,7 @@ export const DOC_SECTIONS = [
 <div class="phase-card">
   <div class="phase-title">Phase 5: Plasma Transition</div>
   <div class="phase-cost">+$6,200 \u2013 $24,000</div>
-  <div class="phase-desc">Ionize mercury via 150 kV\u20131 MV pulse. Compare plasma-state vs. liquid-state response to identical 3-axis drive. Plasma sustains 3D rotation that liquid cannot (Q<sub>3d</sub> \u2248 1.0 vs. viscous collapse). f<sub>d</sub> shifts to ~7,450 Hz.</div>
+  <div class="phase-desc">Ionize mercury via 150 kV\u20131 MV pulse. Compare plasma-state vs. liquid-state response to identical 3-axis drive. (The February claim that a plasma sustains a 3D rotation the liquid cannot, Q<sub>3d</sub> \u2248 1.0, is withdrawn; see Corrections.) f<sub>d</sub> shifts to ~7,450 Hz.</div>
 </div>
 
 <p style="margin-top: 16px;"><strong>Full build (phases 1–2, 4 and 5): ~$23,000 – $115,000</strong></p>
@@ -297,7 +297,6 @@ export const DOC_SECTIONS = [
 
 <p><strong class="audit-verified">What IS real</strong> (survived both audits):</p>
 <ul>
-  <li>3D plasma rotation (Q<sub>3d</sub> \u2248 1.0) = real PIC physics (Boris pusher verified)</li>
   <li>Cyclotron impossible at bench B = pencil math, Biot-Savart</li>
   <li>Faraday induction monotonic (\u221D f<sup>0.87</sup>) = real PIC, no resonance peak</li>
   <li>No special frequencies and no special RS ratios (the February nulls stand)</li>
@@ -317,6 +316,7 @@ export const DOC_SECTIONS = [
   <li>Dynamo threshold Rm ≈ 10 — a constant in the code; the "sharp transition" and the amplification figures follow from the prescribed growth law.</li>
   <li>Ambient Rm ≈ 0.03 — the simulator's speed limit (0.5 m/s), not a computed flow. The stirred mercury's real value is about 0.0025.</li>
   <li>"Eddy-current coupling peak at 48.7 Hz, within 3%" — the lumped model checked against its own formula. In the exact sphere solution, 48.7 Hz is where the field fills the sphere, and the stirring torque per B² peaks near 566 Hz.</li>
+  <li>3D plasma rotation (Q<sub>3d</sub> ≈ 1.0) — with no field at all the metric scores 0.9999: the ions start in random directions at 500 m/s, and 0.65 mT cannot bend them inside the sphere. The single-axis 0.003 was a time-step artefact (0.998 at a 2 µs step).</li>
 </ul>
 
 <p><strong class="audit-hypothesis">What remains HYPOTHESIS</strong> (the point of building):</p>
@@ -332,7 +332,7 @@ export const DOC_SECTIONS = [
 <p><strong>The rigor standard</strong>:</p>
 <blockquote>A simulator that confirms RS theory by having RS theory baked in helps no one — it produces false confidence that could mislead others or waste resources on flawed designs. The standard: would this analysis hold up to hostile peer review?</blockquote>
 
-<p style="font-size: 11px; color: var(--text-dim); margin-top: 16px;">Prototype Spec v1.0 — 2026-02-22 — Post-audit, post-clean-rerun. Corrected 2026-10-14 after a re-run of the February code: five more findings moved out of Verified, and two physical impossibilities removed (see Corrections).</p>
+<p style="font-size: 11px; color: var(--text-dim); margin-top: 16px;">Prototype Spec v1.0 — 2026-02-22 — Post-audit, post-clean-rerun. Corrected 2026-10-14 after a re-run of the February code: six more findings moved out of Verified, and two physical impossibilities removed (see Corrections).</p>
     `,
   },
   {
@@ -353,6 +353,7 @@ export const DOC_SECTIONS = [
   <tr><td>Cryogenic dynamo: SC mercury at 4.2 K, Rm ≈ 3,089, ~856×</td><td><span class="rigor-tag rigor-model">Model</span></td><td>Retired. Mercury superconducts only when frozen; the figures came from the prescribed growth law.</td></tr>
   <tr><td>"The three-axis field drives structured 3D flow around the core"</td><td>—</td><td>Three equal pairs at slightly different frequencies drive no flow at all; two pairs in quadrature stir slowly.</td></tr>
   <tr><td>Questions 3 and 4 (forced Cooper pairing in lead; the cryo-dynamo)</td><td>—</td><td>Replaced by the coils-off test and the spun sphere's centre.</td></tr>
+  <tr><td>3D plasma rotation, Q<sub>3d</sub> ≈ 1.0 (experiment 14)</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td><span class="rigor-tag rigor-circular">Circular</span> It scores 0.9999 with no field at all: the random starting directions of the ions, read back. The single-axis contrast (0.003) was a time-step artefact. Removed.</td></tr>
 </table>
 
 <p>Everything else in the capsule stands as written in February.</p>
