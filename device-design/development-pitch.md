@@ -5,6 +5,8 @@
 **Status**: Proposal — seeking collaborators, funding, and lab access
 **Technical reference**: See `prototype-spec.md` (676 lines, fully tagged engineering spec)
 
+> **Corrected 14 October 2026.** The October theory review re-ran the February simulator code. The core centering (10.5 / 15.7 / 31.6 mm), the 3 > 2 > 1 axis hierarchy and the dynamo threshold (Rm ≈ 10) were assumptions written into the code (**Circular**), the 48.7 Hz "coupling peak" belongs to the simplified (lumped) model, and the "3D plasma rotation" result was the isotropic starting gas read back. The lead core is retired, because lead dissolves in mercury (about 1.6 atomic per cent at room temperature) and is less dense than it: the coreless sphere is now the main experiment, and a density-matched core (e.g. tungsten in a steel shell) is a later stage. The cryogenic dynamo phase is retired too, because mercury superconducts only when frozen; corrections are made in place (sources: `device-design/theory-review-2026-10.md` §1, §7 and §10 (internal; not yet in this repository); `showcase/research/M4-what-makes-motion-3d.md` §4 (internal; not yet in this repository)).
+
 ---
 
 ## 1. Executive Summary
@@ -13,7 +15,7 @@ This document proposes the development of a bench-scale electromagnetic device: 
 
 We propose a staged approach beginning with two low-cost tabletop demonstrations: **Phase A** (~$200–700) uses aluminum spheres levitated in air by eddy-current repulsion from three coils, demonstrating 3-axis centering. **Phase B** (~$500–1,200 additional) substitutes a room-temperature liquid metal (galinstan) with a buoyant glass core, directly paralleling the mercury device physics. Both are safe, visual, and use off-the-shelf components.
 
-The full prototype spans five phases from ambient mercury MHD ($8,500–30,000) through cryogenic dynamo search, anomalous effects measurement, and plasma transition, totaling $36,000–153,000 across all phases. A detailed engineering spec, 3D model, and this document constitute the existing work product.
+The full prototype spans five phases from ambient mercury MHD ($8,500–30,000) through ~~cryogenic dynamo search,~~ anomalous effects measurement, and plasma transition, totaling $36,000–153,000 across all phases (about $23,000–115,000 without the cryogenic phase, retired 14 October 2026). A detailed engineering spec, 3D model, and this document constitute the existing work product.
 
 This document covers the device concept, simulation results, tabletop proof-of-concept plans with bills of materials, the full prototype roadmap, and an honest accounting of what is verified physics versus open hypothesis.
 
@@ -47,6 +49,8 @@ This document covers the device concept, simulation results, tabletop proof-of-c
     16 cm from center along its axis. A lead core floats inside
     at a density-determined equilibrium position.
 ```
+
+*Corrected 14 October 2026: the lead core is retired (see the note at the top), and its simulated "density-determined equilibrium position" was a spring assumed in the code.*
 
 The device consists of three components: a hermetically sealed ceramic or borosilicate glass sphere (10 cm diameter) filled with liquid mercury (~7 kg), a small lead sphere (1.6 cm diameter, ~24 g) floating inside, and orthogonal magnetic coils mounted around the sphere. Two coil configurations are proposed:
 
@@ -121,13 +125,15 @@ The physics involves four well-established mechanisms working together:
 
 1. **Archimedes buoyancy**: Lead (11,340 kg/m³) is less dense than mercury (13,534 kg/m³). The lead core floats — it rises until the buoyant force from displaced mercury balances gravity. This determines the starting equilibrium position.
 
-2. **Faraday induction**: Time-varying magnetic fields from the AC coils induce eddy currents in the mercury. The coupling peaks at a characteristic frequency f_d = 1/(2πμ₀σR²), which is 48.7 Hz for a 5 cm mercury sphere — textbook electromagnetics, confirmed by simulation to within 3%.
+2. **Faraday induction**: Time-varying magnetic fields from the AC coils induce eddy currents in the mercury. ~~The coupling peaks at a characteristic frequency f_d = 1/(2πμ₀σR²), which is 48.7 Hz for a 5 cm mercury sphere — textbook electromagnetics, confirmed by simulation to within 3%.~~ *Corrected 14 October 2026:* the characteristic frequency f_d = 1/(2πμ₀σR²) is 48.7 Hz for a 5 cm mercury sphere; there the skin depth is 7.1 cm and the field fills the sphere. The "peak" at f_d belongs to the simplified (lumped) model, which the simulation checked against itself (**Model**); for the exact sphere the stirring torque keeps rising to a peak near 565 Hz.
 
-3. **Lorentz force**: The induced currents interact with the applied magnetic field (J × B), producing forces that drive structured flow in the mercury. With three orthogonal coils, this produces 3D circulation around the core.
+3. **Lorentz force**: The induced currents interact with the applied magnetic field (J × B), producing forces that drive structured flow in the mercury. With three orthogonal coils, this produces 3D circulation around the core. *Corrected 14 October 2026:* three equal coil pairs at slightly different frequencies stir nothing, because their forces add to a purely central squeeze; two pairs driven a quarter-cycle apart turn the field and stir slowly (theory review §4).
 
-4. **Centering gradient**: The magnetic field geometry creates a gradient that, combined with buoyancy, pushes the lead core toward a position below the geometric center. Adding axes improves centering: 3-axis holds the core at ~10.5 mm below center, 2-axis at ~15.7 mm, 1-axis at ~31.6 mm. This hierarchy is purely geometric — it follows from the field gradient topology with no exotic physics required.
+4. ~~**Centering gradient**: The magnetic field geometry creates a gradient that, combined with buoyancy, pushes the lead core toward a position below the geometric center. Adding axes improves centering: 3-axis holds the core at ~10.5 mm below center, 2-axis at ~15.7 mm, 1-axis at ~31.6 mm. This hierarchy is purely geometric — it follows from the field gradient topology with no exotic physics required.~~ **Circular** (corrected 14 October 2026). In the simulator the core's position is buoyancy balanced against a spring assumed in the code (present only while the claimed activation is on), at about 75 mT per coil pair rather than the 2.4–3.9 mT design field. The 10.5 / 15.7 / 31.6 mm figures and the hierarchy follow from that spring, and the code put the core above centre, not below. With Helmholtz pairs the field is uniform, so there is no gradient to centre anything.
 
 ### 2c. The Dynamo Path
+
+> **Retired 14 October 2026.** Mercury superconducts only when frozen (it freezes at 234 K; the transition is at 4.15 K), so there is no superconducting liquid to flow. The threshold (Rm ≈ 10) is a constant in the simulator code, and the ~864× amplification follows from the growth law written there (**Circular**). The "ambient Rm 0.03" was the simulator's speed limit; the stirred mercury's Rm is about 0.0025, roughly 4,000 times short of self-excitation (theory review §2). The section is kept below as written, for the record.
 
 At room temperature, the electromagnetic forces on the mercury are roughly 1,000× weaker than gravity — measurable with precision instruments, but not dramatic. The device becomes qualitatively different at cryogenic temperatures.
 
@@ -139,15 +145,15 @@ Above Rm ≈ 10, a flowing conductor enters the dynamo regime: induced currents 
 
 ## 3. What the Simulation Established
 
-### 3a. Verified Results
+### 3a. Verified Results (five items retagged 14 October 2026)
 
 Twenty-one experiments across SPH/MHD and PIC (particle-in-cell) simulators established the baseline physics:
 
-- **Centering is density-driven buoyancy** (Archimedes), not exotic. The equilibrium position depends on the density difference between the core and mercury, shaped by the field gradient geometry. Identical results with or without any theoretical overlays.
-- **Axis hierarchy (3 > 2 > 1)** follows directly from field geometry — more orthogonal axes means a tighter gradient cage. Quantified: 10.5 mm / 15.7 mm / 31.6 mm below center.
-- **Eddy-current coupling peaks at f_d** = 1/(2πμ₀σR²), confirmed analytically and numerically to within 3% of textbook prediction.
-- **Dynamo threshold at Rm ≈ 10**: Sharp transition — below threshold, induced fields decay to zero; above, they grow exponentially until back-reaction saturates. SC mercury at 4.2 K reaches Rm ≈ 3,089.
-- **3D plasma rotation sustained** (Q_3d ≈ 1.0 under 3-axis drive): Charged particles maintain coherent rotation in all three planes simultaneously, a behavior impossible in viscous liquid.
+- ~~**Centering is density-driven buoyancy** (Archimedes), not exotic. The equilibrium position depends on the density difference between the core and mercury, shaped by the field gradient geometry. Identical results with or without any theoretical overlays.~~ **Circular**: the position comes from a spring assumed in the code; the buoyancy is real.
+- ~~**Axis hierarchy (3 > 2 > 1)** follows directly from field geometry — more orthogonal axes means a tighter gradient cage. Quantified: 10.5 mm / 15.7 mm / 31.6 mm below center.~~ **Circular**: the 1 : 1.5 : 3 ratio is one, two or three coil pairs adding to the field squared in that assumed spring.
+- ~~**Eddy-current coupling peaks at f_d** = 1/(2πμ₀σR²), confirmed analytically and numerically to within 3% of textbook prediction.~~ **Model**: the peak belongs to the lumped model, which the simulation checked against itself; the exact sphere's torque peaks near 565 Hz.
+- ~~**Dynamo threshold at Rm ≈ 10**: Sharp transition — below threshold, induced fields decay to zero; above, they grow exponentially until back-reaction saturates. SC mercury at 4.2 K reaches Rm ≈ 3,089.~~ **Circular**: the threshold is a constant in the code and the growth above it is written in; superconducting mercury is solid, so the 4.2 K path is retired.
+- ~~**3D plasma rotation sustained** (Q_3d ≈ 1.0 under 3-axis drive): Charged particles maintain coherent rotation in all three planes simultaneously, a behavior impossible in viscous liquid.~~ **Circular**: with no field at all Q_3d = 0.9999, because the isotropic starting ions stay isotropic (0.65 mT cannot bend them inside 5 cm), and the metric scores 0.88 for one-axis solid rotation, so it cannot show rotation in all three planes at once (M4 §4).
 - **Mercury plasma is 150× worse conductor than liquid mercury**: Spitzer conductivity analysis. Classical dynamo via plasma is not viable.
 - **Cyclotron resonance is impossible at bench magnetic fields**: Hg⁺ Larmor radius at max coil field is ~21 m — 420× the sphere radius. Ions cannot complete orbits.
 
@@ -157,13 +163,15 @@ The simulator cannot address the questions that motivated building the device:
 
 - **Anomalous weight or inertial effects** — the simulator has no mechanism to produce or detect these
 - **Forced Cooper pairing** in lead above T_c — requires real EM pulses at real energies
-- **Real dynamo behavior** at SC conditions — the SPH model approximates but cannot reproduce superconducting MHD
+- **Real dynamo behavior** at SC conditions — the SPH model approximates but cannot reproduce superconducting MHD *(retired 14 October 2026: mercury is solid when superconducting)*
 - **Plasma vs. liquid mercury** behavior differences under 3-axis drive at realistic parameters
 - **Any deviation from standard physics** — the simulator IS standard physics; it can only predict what standard physics predicts
 
 ### 3c. The Honesty Audit
 
 A full code audit in February 2026 discovered two instances where theoretical assumptions had been hardcoded into the simulation, then "confirmed" by experiments that could not have produced any other result. Both were disabled, four key experiments were rerun clean, and the results were identical — the biased mechanisms had affected approach speed but not equilibrium physics. Every claim in the engineering spec is now tagged as VERIFIED, MODEL PREDICTION, HYPOTHESIS, or UNTESTED, and the audit is documented.
+
+*Corrected 14 October 2026: a second audit in October re-ran the February code itself and found that the equilibrium positions, the axis hierarchy and the dynamo threshold were also assumptions written into the code. The engineering spec now uses the tag CIRCULAR for them.*
 
 ---
 
@@ -173,7 +181,7 @@ These two demonstrations use safe, accessible materials to establish the core op
 
 ### 4a. Phase A: 3-Axis Electromagnetic Centering in Air
 
-**What it demonstrates**: A small conductive sphere held in stable equilibrium at the center of three orthogonal AC magnetic fields. Turn off one axis — the sphere drifts along that axis. Restore it — the sphere re-centers. This is the device's centering mechanism made visible.
+**What it demonstrates**: A small conductive sphere held in stable equilibrium at the center of three orthogonal AC magnetic fields. Turn off one axis — the sphere drifts along that axis. Restore it — the sphere re-centers. ~~This is the device's centering mechanism made visible.~~ *Corrected 14 October 2026: the simulator's centering was a spring assumed in the code, so this demonstrates eddy-current levitation, not a mechanism the simulation found.*
 
 **Physics**: Lenz's law eddy-current repulsion. A time-varying magnetic field induces currents in a conductor; those currents generate an opposing field (Lenz's law), producing a repulsive force that pushes the conductor away from the field source. With three coils arranged on orthogonal axes, the repulsive forces create a 3D potential well at the geometric center.
 
@@ -201,7 +209,7 @@ Coil impedance at 100 Hz is approximately 3–4 Ω (inductive reactance ~3 Ω pl
 1. Stable 3-axis centering of aluminum sphere in free air
 2. Remove one axis → sphere drifts along unaddressed axis (demonstrates axis hierarchy)
 3. Restore axis → sphere re-centers (demonstrates controllability)
-4. Frequency sweep → observe coupling peak near 34 Hz
+4. Frequency sweep → observe coupling peak near 34 Hz *(the "peak" at f_d is a property of the lumped model; corrected 14 October 2026)*
 5. Amplitude sweep → map centering force vs. current
 
 **Bill of Materials — Phase A**:
@@ -225,7 +233,7 @@ Coil impedance at 100 Hz is approximately 3–4 Ω (inductive reactance ~3 Ω pl
 
 **Coil configuration note**: At PoC scale (12–15 cm diameter, 100 turns thin wire), coils at different radii nest naturally as Helmholtz pairs — the same geometry as Configuration A in Section 2a. Either single-coil (Configuration B) or Helmholtz-pair (Configuration A) can be built for Phase A. Helmholtz pairs give better field uniformity at center and are standard lab equipment, making the demonstration more legible to physics audiences. The cost difference is minimal (double the wire, same amplifiers if pairs are wired in series).
 
-**Important note**: Eddy-current levitation in air is well-established physics — this is not novel. What has not been demonstrated is the 3-axis configuration producing the centering hierarchy (3-axis > 2-axis > 1-axis) predicted by the simulation. That hierarchy is the experimentally testable claim.
+**Important note**: Eddy-current levitation in air is well-established physics — this is not novel. What has not been demonstrated is the 3-axis configuration producing the centering hierarchy (3-axis > 2-axis > 1-axis) ~~predicted by the simulation~~. That hierarchy is the experimentally testable claim. *Corrected 14 October 2026: the simulation's hierarchy was an assumption written into the code (Circular), so it is not a prediction to test against.*
 
 ### 4b. Phase B: Conductive Fluid + Core Centering
 
@@ -254,8 +262,8 @@ Still in the audio frequency range. Galinstan's higher conductivity compensates 
 A soda-lime glass marble (ρ ≈ 2,500 kg/m³) or PTFE ball (ρ ≈ 2,200 kg/m³) floats in galinstan (ρ = 6,440 kg/m³) with a density gap of ~3,940–4,240 kg/m³ — even stronger buoyancy than lead in mercury. Both materials are chemically inert with galinstan.
 
 **Key demonstrations**:
-1. Core position vs. number of active axes: 1-axis, 2-axis, 3-axis → expect measurable centering hierarchy
-2. Frequency sweep → coupling peak near 59 Hz
+1. Core position vs. number of active axes: 1-axis, 2-axis, 3-axis ~~→ expect measurable centering hierarchy~~ *(corrected 14 October 2026: the expected hierarchy came from the simulator's assumed spring. For a light core, conventional physics predicts a different ordering: three equal pairs at slightly different frequencies stir nothing, and a two-pair drive turning about a horizontal axis holds a buoyant core best; theory review §4)*
+2. Frequency sweep → coupling peak near 59 Hz *(a lumped-model "peak"; corrected 14 October 2026)*
 3. Direct parallel to the mercury device physics, viewable through glass walls
 
 **Containment note**: Galinstan aggressively wets most metals (gallium alloys with aluminum, copper, etc.) but does NOT wet clean glass, quartz, or ceramic. All containment and tooling must be glass, quartz, ceramic, or PTFE. No metal components in contact with galinstan.
@@ -283,16 +291,16 @@ A soda-lime glass marble (ρ ≈ 2,500 kg/m³) or PTFE ball (ρ ≈ 2,200 kg/m³
 The tabletop PoC demonstrates the principle. The full prototype tests whether the principle produces anything beyond textbook predictions. Five phases, each independently useful:
 
 **Phase 1–2: Mercury MHD + Core Centering** ($8,500–30,000)
-Sealed ceramic/glass sphere with liquid mercury and lead core, driven by three orthogonal pancake coils at 0–200 Hz, 10–100 A. Validates mercury flow under 3-axis drive, measures core centering positions against simulation predictions, establishes baseline weight measurements on precision balance. First mercury-specific results. Requires fume hood and mercury handling PPE.
+Sealed ceramic/glass sphere with liquid mercury and lead core, driven by three orthogonal pancake coils at 0–200 Hz, 10–100 A. Validates mercury flow under 3-axis drive, measures core centering positions against simulation predictions, establishes baseline weight measurements on precision balance. *(Corrected 14 October 2026: run coreless first, since the lead core is retired, and there are no valid simulated centering positions to measure against.)* First mercury-specific results. Requires fume hood and mercury handling PPE.
 
-**Phase 3: Cryogenic Dynamo Search** ($13,000–38,000 additional)
-Adds cryostat to cool mercury below 4.15 K (superconducting transition). Tests whether the predicted ~864× field amplification occurs — whether the system enters the self-sustaining dynamo regime. The most consequential single experiment: if it works, the coils become control surfaces and the device generates its own operating field. This is the same dynamo physics that sustains Earth's magnetic field.
+~~**Phase 3: Cryogenic Dynamo Search** ($13,000–38,000 additional)~~ **Retired 14 October 2026.** Mercury superconducts only when frozen, so there is no superconducting liquid to stir, and the ~864× amplification came from a growth law written into the simulator (**Circular**).
+~~Adds cryostat to cool mercury below 4.15 K (superconducting transition). Tests whether the predicted ~864× field amplification occurs — whether the system enters the self-sustaining dynamo regime. The most consequential single experiment: if it works, the coils become control surfaces and the device generates its own operating field. This is the same dynamo physics that sustains Earth's magnetic field.~~
 
 **Phase 4: Anomalous Effects Search** ($8,200–60,500 additional)
 Systematic measurement campaign: upgraded precision balance (±0.1 mg), 3-axis accelerometer, spectrum analyzer, and if accessible, a relative gravimeter (±1 μGal). Looking for any measurable deviation from standard physics — weight anomaly, inertial anomaly, unexpected EM emissions. The expected result is null. A positive result would be significant.
 
 **Phase 5: Plasma Transition** ($6,200–24,000 additional)
-High-voltage pulse (Marx generator or capacitor bank, 150 kV–1 MV) ionizes mercury to plasma state in argon pre-fill atmosphere. Tests whether plasma mercury responds differently to 3-axis drive than liquid mercury — the simulator predicts distinct coupling mechanisms. Requires two-person operation and HV safety protocols.
+High-voltage pulse (Marx generator or capacitor bank, 150 kV–1 MV) ionizes mercury to plasma state in argon pre-fill atmosphere. Tests whether plasma mercury responds differently to 3-axis drive than liquid mercury ~~— the simulator predicts distinct coupling mechanisms~~. *(Withdrawn 14 October 2026: the simulator's plasma Q_3d result was its isotropic starting condition read back, so it makes no such prediction; M4 §4.)* Requires two-person operation and HV safety protocols.
 
 **Cumulative Cost Summary**:
 
@@ -300,11 +308,12 @@ High-voltage pulse (Marx generator or capacitor bank, 150 kV–1 MV) ionizes mer
 |---------------|----------|
 | PoC only (Phase A + B) | $500–1,900 |
 | Phase 1–2 (ambient liquid MHD) | $8,500–30,000 |
-| + Phase 3 (cryogenic dynamo) | $21,500–68,000 |
+| ~~+ Phase 3 (cryogenic dynamo)~~ | ~~$21,500–68,000~~ (retired) |
 | + Phase 4 (anomalous effects) | $29,700–128,500 |
 | + Phase 5 (plasma transition) | $35,900–152,500 |
+| Phases 1–2, 4 and 5, without the retired Phase 3 (added 14 October 2026) | ~$23,000–115,000 |
 
-Phases 3 and 5 are independent — either can be built first. Phase 4 benefits from both but can begin with Phase 1–2 data alone.
+Phases 3 and 5 are independent — either can be built first. *(Phase 3 retired 14 October 2026; the rows from Phase 4 on include it.)* Phase 4 benefits from both but can begin with Phase 1–2 data alone.
 
 ---
 
@@ -314,13 +323,13 @@ This is the honest accounting. Every claim falls into one of two columns.
 
 | What We Know (Verified / Textbook) | What We Hypothesize (Untested) |
 |---|---|
-| Eddy-current levitation via Lenz's law — demonstrated since 1920s | Dynamo amplification at the predicted ~864× level |
+| Eddy-current levitation via Lenz's law — demonstrated since 1920s | ~~Dynamo amplification at the predicted ~864× level~~ (retired 14 October 2026: no superconducting liquid exists) |
 | Mercury properties: ρ = 13,534 kg/m³, σ = 1.04×10⁶ S/m, T_c = 4.15 K (CRC Handbook, Onnes 1911) | Any anomalous weight or inertia effect |
 | Lead floats in mercury (Δρ = 2,194 kg/m³) | Forced Cooper pairing in Pb above T_c |
 | Dynamo effect: demonstrated in Riga (2000), Karlsruhe (2000), and VKS (2007) liquid-metal experiments | Plasma vs. liquid mercury producing qualitatively different effects |
 | SC mercury since 1911 — oldest known superconductor | Non-standard frequency or amplitude sensitivities |
-| Eddy-current coupling peaks at f_d = 1/(2πμ₀σR²) — textbook EM | Consciousness-EM coupling (theoretical, far-future) |
-| 3-axis field geometry produces tighter centering than 2- or 1-axis — confirmed by simulation and field geometry analysis | Reference frame decoupling or modification of local spacetime metric |
+| ~~Eddy-current coupling peaks at f_d = 1/(2πμ₀σR²) — textbook EM~~ At f_d = 1/(2πμ₀σR²) the field fills the sphere (skin depth 7.1 cm at 48.7 Hz); the "peak" there belongs to the lumped model (corrected 14 October 2026) | Consciousness-EM coupling (theoretical, far-future) |
+| ~~3-axis field geometry produces tighter centering than 2- or 1-axis — confirmed by simulation and field geometry analysis~~ Withdrawn 14 October 2026: the simulated hierarchy was an assumed spring (Circular); conventional physics predicts a different ordering for a light core (theory review §4) | Reference frame decoupling or modification of local spacetime metric |
 | Mercury plasma is 150× worse conductor than liquid — Spitzer/Saha | Any effect that cannot be explained by classical EM + gravity + buoyancy |
 
 **What we are NOT claiming**: This project does not claim anti-gravity, propulsion, or any validated exotic physics. The device is designed to systematically test whether such effects exist under these specific conditions. A null result — standard physics only, no anomalies — is a valid and publishable outcome.
@@ -354,11 +363,11 @@ Six independent research lines spanning 65+ years converge on a common architect
 - **Phase A (3-axis air centering)**: 1–2 weeks build, under $700. Can begin immediately.
 - **Phase B (conductive fluid + core)**: 2–4 weeks after Phase A, under $1,200 additional. Requires galinstan procurement.
 - **Phase 1–2 (mercury prototype)**: 2–3 months, $8,500–30,000. Requires lab with fume hood.
-- **Phase 3+ (cryogenic / anomalous / plasma)**: Incremental from established Phase 1–2 baseline.
+- **Phase 3+ (~~cryogenic /~~ anomalous / plasma)**: Incremental from established Phase 1–2 baseline. *(Cryogenic phase retired 14 October 2026.)*
 
 ### What Already Exists
 
-- 21 simulation experiments (SPH/MHD + PIC), fully audited for circularity
+- 21 simulation experiments (SPH/MHD + PIC), fully audited for circularity *(a second audit in October 2026 found more; see the note at the top)*
 - 676-line engineering specification with every claim tagged by rigor level
 - 3D model of the 3-coil geometry (Blender)
 - This development proposal

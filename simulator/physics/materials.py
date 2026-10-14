@@ -37,7 +37,9 @@ from dataclasses import dataclass, field
 RS_BASE_FREQ = 50.0  # Hz — bottom of Podkletnov's empirical range
 
 # Displacement reference — used to normalize frequency scaling
-RS_REF_DISPLACEMENT = 10.0  # Mercury's total displacement (the working fluid)
+# Set from mercury's total under the pre-2026-10-14 table (4+4+2). With Larson's
+# 4-4-(6) mercury's m1+m2+e is 2; the value is kept so the untested formula is unchanged.
+RS_REF_DISPLACEMENT = 10.0
 
 
 @dataclass
@@ -213,7 +215,11 @@ class Material:
 
 # === Material Database ===
 # RS displacement values from Larson's periodic table
-# Format: rs_magnetic=(m1, m2), rs_electric=e
+# Format: rs_magnetic=(m1, m2), rs_electric=e; e is signed: Larson's parenthesised
+#   (negative) electric displacement is a negative int, e.g. Hg 4-4-(6) -> (4, 4), -6
+# Corrected 2026-10-14 to Larson, Nothing But Motion (1979) ch. 10, Tables 1-3 (11 of 13 entries were wrong).
+# With signed e the rs_* hypothesis formulas above can give a negative or >1 Z ratio, and a
+#   total <= 0 (rs_optimal_frequency then falls back to RS_BASE_FREQ).
 # Reference: "Nothing But Motion" (1979), "The Structure of the Physical Universe" (1959)
 
 LEAD = Material(
@@ -223,7 +229,7 @@ LEAD = Material(
     susceptibility=-1.8e-5,
     viscosity=0.0,
     color=(120, 125, 140),
-    rs_magnetic=(4, 4), rs_electric=1,  # Period 6, Group 14 (IVA)
+    rs_magnetic=(4, 4), rs_electric=-4,  # Period 6, Group 14 (IVA); Larson 4-4-(4)
 )
 
 ALUMINUM = Material(
@@ -233,7 +239,7 @@ ALUMINUM = Material(
     susceptibility=2.2e-5,
     viscosity=0.0,
     color=(200, 210, 220),
-    rs_magnetic=(2, 2), rs_electric=3,  # Period 3, Group 13 (IIIA)
+    rs_magnetic=(2, 2), rs_electric=3,  # Period 3, Group 13 (IIIA); Larson 2-2-3
 )
 
 COPPER = Material(
@@ -243,7 +249,7 @@ COPPER = Material(
     susceptibility=-9.6e-6,
     viscosity=0.0,
     color=(200, 130, 80),
-    rs_magnetic=(3, 3), rs_electric=1,  # Period 4, Group 11 (IB)
+    rs_magnetic=(3, 3), rs_electric=-7,  # Period 4, Group 11 (IB); Larson 3-3-(7)
 )
 
 IRON = Material(
@@ -253,7 +259,7 @@ IRON = Material(
     susceptibility=200000.0,
     viscosity=0.0,
     color=(160, 160, 165),
-    rs_magnetic=(3, 3), rs_electric=6,  # Period 4, Group 8 (VIII)
+    rs_magnetic=(3, 2), rs_electric=8,  # Period 4, Group 8 (VIII); Larson 3-2-8
 )
 
 BISMUTH = Material(
@@ -263,7 +269,7 @@ BISMUTH = Material(
     susceptibility=-1.66e-4,
     viscosity=0.0,
     color=(180, 170, 190),
-    rs_magnetic=(4, 4), rs_electric=3,  # Period 6, Group 15 (VA)
+    rs_magnetic=(4, 4), rs_electric=-3,  # Period 6, Group 15 (VA); Larson 4-4-(3)
 )
 
 MERCURY = Material(
@@ -273,7 +279,7 @@ MERCURY = Material(
     susceptibility=-2.9e-5,
     viscosity=1.526e-3,
     color=(180, 195, 210),
-    rs_magnetic=(4, 4), rs_electric=2,  # Period 6, Group 12 (IIB)
+    rs_magnetic=(4, 4), rs_electric=-6,  # Period 6, Group 12 (IIB); Larson 4-4-(6)
 )
 
 # === Additional elements for broader periodic table coverage ===
@@ -285,7 +291,7 @@ GOLD = Material(
     susceptibility=-3.4e-5,
     viscosity=0.0,
     color=(218, 185, 82),
-    rs_magnetic=(4, 4), rs_electric=1,  # Period 6, Group 11 (IB) — same displacement as Pb!
+    rs_magnetic=(4, 4), rs_electric=-7,  # Period 6, Group 11 (IB); Larson 4-4-(7)
 )
 
 SILVER = Material(
@@ -295,7 +301,7 @@ SILVER = Material(
     susceptibility=-2.4e-5,
     viscosity=0.0,
     color=(192, 192, 200),
-    rs_magnetic=(3, 3), rs_electric=1,  # Period 5, Group 11 (IB) — same as Cu pattern
+    rs_magnetic=(4, 3), rs_electric=-7,  # Period 5, Group 11 (IB); Larson 4-3-(7)
 )
 
 TIN = Material(
@@ -305,7 +311,7 @@ TIN = Material(
     susceptibility=-2.4e-5,
     viscosity=0.0,
     color=(170, 175, 180),
-    rs_magnetic=(3, 3), rs_electric=4,  # Period 5, Group 14 (IVA)
+    rs_magnetic=(4, 3), rs_electric=-4,  # Period 5, Group 14 (IVA); Larson 4-3-(4)
 )
 
 ZINC = Material(
@@ -315,7 +321,7 @@ ZINC = Material(
     susceptibility=-1.6e-5,
     viscosity=0.0,
     color=(160, 170, 185),
-    rs_magnetic=(3, 3), rs_electric=2,  # Period 4, Group 12 (IIB)
+    rs_magnetic=(3, 3), rs_electric=-6,  # Period 4, Group 12 (IIB); Larson 3-3-(6)
 )
 
 TUNGSTEN = Material(
@@ -325,7 +331,7 @@ TUNGSTEN = Material(
     susceptibility=6.8e-5,
     viscosity=0.0,
     color=(140, 145, 155),
-    rs_magnetic=(4, 4), rs_electric=6,  # Period 6, Group 6 (VIB)
+    rs_magnetic=(4, 4), rs_electric=-12,  # Period 6, Group 6 (VIB); Larson 4-4-(12)
 )
 
 TITANIUM = Material(
@@ -335,7 +341,7 @@ TITANIUM = Material(
     susceptibility=1.8e-4,
     viscosity=0.0,
     color=(160, 170, 175),
-    rs_magnetic=(3, 3), rs_electric=4,  # Period 4, Group 4 (IVB)
+    rs_magnetic=(3, 2), rs_electric=4,  # Period 4, Group 4 (IVB); Larson 3-2-4
 )
 
 THORIUM = Material(
@@ -345,7 +351,7 @@ THORIUM = Material(
     susceptibility=8.4e-5,
     viscosity=0.0,
     color=(160, 155, 140),
-    rs_magnetic=(4, 4), rs_electric=4,  # Period 7 actinide, total displacement 12
+    rs_magnetic=(4, 4), rs_electric=4,  # Period 7 actinide; Larson 4-4-4 (total displacement 12)
 )
 
 YBCO = Material(
@@ -430,7 +436,7 @@ if __name__ == "__main__":
     print()
 
     print("Mapping: Coil X ↔ m1 (mag primary), Coil Y ↔ m2 (mag secondary), Coil Z ↔ e (electric)")
-    print(f"Base frequency: {RS_BASE_FREQ} Hz, Reference displacement: {RS_REF_DISPLACEMENT} (Hg)")
+    print(f"Base frequency: {RS_BASE_FREQ} Hz, Reference displacement: {RS_REF_DISPLACEMENT} (Hg under the pre-2026-10-14 table)")
     print()
 
     # Show predictions

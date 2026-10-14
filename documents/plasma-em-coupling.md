@@ -3,6 +3,8 @@
 **Date**: 2026-02-21
 **Context**: Mercury plasma conductivity research falsified the classical dynamo path. This document analyzes what ionization *actually* enables.
 
+> **Corrected 14 October 2026.** Two supports for "plasma sustains 3D rotation that liquid cannot" are withdrawn. "The simulator confirms this" (under *True 3D Rotation vs. Bulk Vortex*) rests on the SPH liquid's total angular momentum settling to one vector, which physics predicts for any liquid; the SPH model never computed Q_3d. The PIC module later built from this plan gave the plasma Q_3d ≈ 1 only because its isotropic 500 m/s starting ions stay isotropic in fields too weak to bend them inside the sphere (Q_3d = 0.9999 with no field at all), so it gives no support for rotation "around all three axes simultaneously". Source: `showcase/research/M4-what-makes-motion-3d.md` §4 (internal; not yet in this repository).
+
 ## The Two Coupling Regimes
 
 ### Regime 1: Liquid Metal MHD (Current Simulator Model)
@@ -134,7 +136,7 @@ In liquid mercury, viscous coupling prevents individual atoms from tracking this
 
 ### 1. True 3D Rotation vs. Bulk Vortex
 
-**Liquid**: Three orthogonal coils drive three vortex patterns. Viscosity couples them. The result is a single dominant circulation pattern (angular momentum settles along one preferred axis). The simulator confirms this — angular momentum vector converges even with three active axes.
+**Liquid**: Three orthogonal coils drive three vortex patterns. Viscosity couples them. The result is a single dominant circulation pattern (angular momentum settles along one preferred axis). ~~The simulator confirms this — angular momentum vector converges even with three active axes.~~ *(Withdrawn 14 October 2026: a liquid's total angular momentum is one vector in any case, so this is no contrast with plasma; M4 §4.)*
 
 **Plasma**: Each ion tracks the 3D field pattern individually. No viscous coupling to force a single rotation axis. The plasma can sustain coherent rotation around all three axes simultaneously. This is the quaternion rotation that liquid mercury cannot achieve.
 

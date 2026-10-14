@@ -1,5 +1,7 @@
 # Parameter Space — Known Constraints from All Sources
 
+> **Corrected 14 October 2026.** The October theory review re-ran the February simulator code: the dynamo threshold (Rm ≈ 10), its sharp transition and the 864× amplification reported below were written into the code (**Circular**), and the cryogenic (superconducting-mercury) dynamo is retired, because mercury superconducts only when frozen. The RS displacement values in the two RS tables were wrong for most elements: they came from the simulator's materials table, now corrected to Larson, *Nothing But Motion* ch. 10. Corrections are made in place; source: `device-design/theory-review-2026-10.md` §1, §2 and §10 (internal; not yet in this repository).
+
 ## Compiled Engineering Parameters
 
 ### Medium: Mercury
@@ -69,6 +71,8 @@
 | W | 14 | 98.0 | UNTESTED |
 | Hg (fluid) | 10 | 50.0 | (reference) |
 
+*Corrected 14 October 2026: the "RS Total" column came from the simulator's old displacement table and is wrong for every element here except Al. Larson's values (Nothing But Motion, ch. 10) are Al 2-2-3, Cu 3-3-(7), Ag 4-3-(7), Pb 4-4-(4), Au 4-4-(7), Sn 4-3-(4), Bi 4-4-(3), Fe 3-2-8, W 4-4-(12) and Hg 4-4-(6), where parentheses mark a negative electric displacement. The frequencies are left as written; the formula has never been tested, and the February sweeps were flat.*
+
 - Formula: **f_optimal = 50 × (total_displacement / 10)² Hz — HYPOTHESIS (UNTESTED)**
 - ~~VALIDATED 5/5 elements~~ **RETRACTED (audit 2026-02-22)**: The "5/5 match" was CIRCULAR. The simulator's `rs_resonance_boost` in `core_dynamics.py` hardcoded a sigmoid that rewarded RS-predicted frequencies with up to 2x force multiplier. When this boost was disabled (experiment 19), frequency sweeps were COMPLETELY FLAT — no frequency preference at all. The formula remains an untested RS theory prediction.
 - **Working assumption**: Use RS-predicted frequency as one starting point among others. Also test textbook eddy-current peak f_d = 1/(2πμ₀σR²) and broad sweeps. Do NOT expect a peak at the RS prediction — it has no simulator support.
@@ -86,6 +90,8 @@ From RS displacement theory (Larson). These are theoretical predictions, NOT sim
 | Sn | (3,3)-4 | [0.75, 0.75, 1.00] | [0, 0, 30.0] |
 | Hg | (4,4)-2 | [1.00, 1.00, 0.50] | [0, 0, 14.0] |
 
+*Corrected 14 October 2026: the displacement column is wrong for every element here except Al (Larson's values are listed under the frequency table above). The ratios and phases were computed from the wrong values and are left as written.*
+
 ~~Key findings~~ **RETRACTED (audit 2026-02-22)**:
 - ~~Equal amplitudes [1,1,1] are suboptimal for every element~~ — This "finding" came from experiments where `rs_resonance_boost` was active, rewarding RS-matched amplitudes with up to 2x force multiplier. The result was CIRCULAR.
 - **Experiment 21 (honest test, RS boost disabled)**: RS amplitude ratios have NO special status. Core centering IDENTICAL across equal/RS/swapped configs (spread < 0.012mm = noise). Mercury flow stochastic — RS ratio NEVER wins.
@@ -97,9 +103,12 @@ From RS displacement theory (Larson). These are theoretical predictions, NOT sim
 - **Practical**: 1-5 kg for tabletop experiment (mercury is 13.5 g/cm³, so ~75-375 cm³ = roughly a golf ball to tennis ball volume)
 
 ### Dynamo Threshold (Rm_crit)
+
+> **Corrected 14 October 2026.** This section reports the simulator's own growth law, not physics it computed. `RM_CRIT = 10.0` is a constant in `research.py`, and the amplification figures, the sharp transition and the σ^4.05 law follow from the law written into the code (**Circular**). The Rm values below use the SPH model's 0.5 m/s speed clamp; at the real stirred speed (~4 cm/s) the bench sphere's Rm is about 0.0025, roughly 4,000 times short of self-excitation. The superconducting-mercury row is retired: mercury freezes at 234 K and superconducts only below 4.15 K, so nothing flows (theory review §1, §2).
+
 From simulator dynamo experiment (Feb 2026):
 - **Rm = μ₀ × σ × v_rms × L** — must exceed ~10 for self-sustaining field
-- Bench ambient Hg (5cm): Rm ≈ 0.03 — sub-critical by 300×
+- Bench ambient Hg (5cm): Rm ≈ ~~0.03 — sub-critical by 300×~~ 0.0025 at the stirred speed, sub-critical by about 4,000× (corrected 14 October 2026; 0.03 was the speed clamp)
 
 | Configuration | σ (S/m) | L (m) | Rm | Amplification | Status |
 |---|---|---|---|---|---|
@@ -108,22 +117,22 @@ From simulator dynamo experiment (Feb 2026):
 | Lab sodium (50cm) | 2.1×10⁷ | 0.50 | 6.1 | 1.0x | Sub-critical |
 | Eng. sodium (1m) | 2.1×10⁷ | 1.00 | 12.4 | ~1x | Barely sustaining |
 | Lab enhanced (50cm, σ×100) | 1.04×10⁸ | 0.50 | 30.1 | 15.6x | Dynamo |
-| **Bench SC-Hg (5cm, 4.2K)** | ~10¹¹ | 0.05 | **3089** | **864x** | **Full dynamo** |
+| ~~**Bench SC-Hg (5cm, 4.2K)**~~ | ~~about 10¹¹~~ | ~~0.05~~ | ~~**3089**~~ | ~~**864x**~~ | **Retired 14 October 2026** (mercury is solid when superconducting; the 864× is the coded growth law) |
 
-**Dynamo transition shape** (experiment 11, Feb 2026):
+**Dynamo transition shape** (experiment 11, Feb 2026): *(**Circular**: the growth law written into the code; see the note above)*
 - Transition is **sharp**: last sub-critical at σ×325 (Rm=9.9), first supercritical at σ×350 (Rm=10.7)
 - Transition gap: Δσ×25 — this is standard MHD critical-transition physics (not specific to RS theory)
 - Amplification growth: **amp ∝ σ^4.05** — very steep power law above threshold
 - From σ×350 (amp=1.0x) to σ×500 (amp=6.2x) is only 1.4× increase in σ
 
-**RS tuning does NOT affect dynamo threshold** (experiment 9, Feb 2026):
+**RS tuning does NOT affect dynamo threshold** (experiment 9, Feb 2026): *(**Circular**: every configuration crosses at the coded constant)*
 - Generic, RS-tuned(Pb), and RS-tuned(Hg) all cross at same threshold (σ×400, Rm≈10)
 - RS tuning affects core-field coupling (centering), not mercury bulk flow dynamics
 - The dynamo effect is a function of Rm = μ₀σvL, independent of core coupling quality
 
 Key implications:
 - Ambient mercury in any practical device size is sub-critical — σ is too low
-- **Cryogenic mercury (4.2K, superconducting)**: trivially reaches dynamo, 864x amplification — coils become control surfaces
+- ~~**Cryogenic mercury (4.2K, superconducting)**: trivially reaches dynamo, 864x amplification — coils become control surfaces~~ **Retired 14 October 2026**: mercury is solid when superconducting, and the 864× came from the coded growth law.
 - **~~Plasma mercury (Clemens pulse)~~**: ~~if ionization boosts σ by 500×+, bench dynamo is achievable at ambient temperature~~ **FALSIFIED** (see below)
 - **Liquid sodium at 1m scale**: proven technology, barely reaches threshold (Rm ≈ 12)
 - Scaling law: Rm ∝ σ × v × L — doubling any one parameter doubles Rm
@@ -144,9 +153,9 @@ Key implications:
 - **Working assumption — REVISED (Feb 2026)**: Plasma mercury cannot achieve classical dynamo (σ drops 150×). This forces a reinterpretation:
   - **The Clemens pulse is NOT about boosting σ for dynamo.** Plasma Hg is 150× less conductive than liquid.
   - **The pulse enables direct EM coupling.** Neutral liquid Hg only interacts via bulk eddy currents. Ionized Hg has individual charged particles that respond to the 3-axis field — enabling quaternion rotation at particle level.
-  - **Cryogenic 4.2K** → superconducting mercury, guaranteed classical dynamo with 864x amplification — but this may be an entirely different operating regime from what Clemens describes.
+  - ~~**Cryogenic 4.2K** → superconducting mercury, guaranteed classical dynamo with 864x amplification — but this may be an entirely different operating regime from what Clemens describes.~~ **Retired 14 October 2026**: superconducting mercury is solid, so there is no liquid to stir, and the 864× was the coded growth law.
   - **Two distinct device architectures emerge**:
-    1. **Cryo-dynamo**: Liquid SC-Hg, classical self-sustaining B-field, coils as control surfaces
+    1. ~~**Cryo-dynamo**: Liquid SC-Hg, classical self-sustaining B-field, coils as control surfaces~~ (retired 14 October 2026: superconducting mercury is solid, not liquid)
     2. **Plasma-coupling**: Ionized Hg, direct EM manipulation of charged particles, quaternion field pattern — this is Clemens's approach and likely the consciousness-interface path
 
 ## Safety Constraints
