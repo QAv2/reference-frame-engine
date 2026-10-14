@@ -14,8 +14,6 @@ import { DOC_SECTIONS } from './content.js';
 
 const SPHERE_RADIUS = 0.05;
 const SPHERE_WALL   = 0.003;
-const CORE_RADIUS   = 0.008;
-const CORE_EQ_Y     = -0.0105;   // 10.5 mm below center
 const MERCURY_RADIUS = SPHERE_RADIUS - SPHERE_WALL;
 const GLOW_RADIUS    = 0.025;
 
@@ -126,15 +124,6 @@ function createAcrylicMaterial() {
   });
 }
 
-function createLeadMaterial() {
-  return new THREE.MeshPhysicalMaterial({
-    color: 0x2a2a2e,
-    metalness: 1.0,
-    roughness: 0.55,
-    envMapIntensity: 0.6,
-  });
-}
-
 function createEnergyMaterial() {
   return new THREE.MeshPhysicalMaterial({
     color: 0x0a1530,
@@ -207,13 +196,7 @@ function buildDevice() {
   group.add(energy);
   meshMap[energy.name] = energy;
 
-  // Lead Core
-  const coreGeo = new THREE.SphereGeometry(CORE_RADIUS, 32, 16);
-  const core = new THREE.Mesh(coreGeo, createLeadMaterial());
-  core.name = 'Pb_Core';
-  core.position.set(0, CORE_EQ_Y, 0);
-  group.add(core);
-  meshMap[core.name] = core;
+  // No core: the lead core was retired 2026-10-14 (lead dissolves in mercury)
 
   // Coil pairs
   const coilConfigs = [
@@ -353,7 +336,7 @@ function renderDocs() {
 
   container.innerHTML = `
     <h1>Reference Frame Engine</h1>
-    <div class="subtitle">Bench-Scale Prototype \u2014 Spec v1.0 \u2014 2026-02-22</div>
+    <div class="subtitle">Bench-Scale Prototype \u2014 Spec v1.0 \u2014 2026-02-22 \u2014 corrected 2026-10-14</div>
   `;
 
   DOC_SECTIONS.forEach(section => {
@@ -386,6 +369,7 @@ async function playIntro() {
     { text: 'ACCESSING SEALED ARCHIVE...', cls: '' },
     { text: '', cls: '' },
     { text: `CAPSULE DATE: 2026-02-22`, cls: 'dim' },
+    { text: `CORRECTED: 2026-10-14`, cls: 'dim' },
     { text: `ACCESSED: ${new Date().toISOString().split('T')[0]}`, cls: 'dim' },
     { text: '', cls: '' },
     { text: 'If you found this, you looked up.', cls: 'amber' },

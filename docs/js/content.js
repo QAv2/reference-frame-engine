@@ -1,6 +1,7 @@
 // ===========================================================
 // content.js — Component info + documentation sections
-// All specs sourced from device-design/prototype-spec.md
+// All specs sourced from device-design/prototype-spec.md,
+// corrected 2026-10-14 after the October theory review
 // Rigor tags per CLAUDE.md hierarchy
 // ===========================================================
 
@@ -13,47 +14,33 @@ export const COMPONENT_INFO = {
     params: [
       'R = 5.0 cm (10 cm dia)',
       'Wall: 3 mm ceramic or borosilicate glass',
-      'Hg volume: ~521 cm\u00B3 = 7.03 kg',
+      'Hg volume: ~524 cm³ = 7.09 kg (no core)',
     ],
     rigor: 'verified',
     rigorNote: 'Geometry — independently calculable',
   },
   mercury: {
     name: 'Mercury (Hg)',
-    role: 'Rotating conductor medium. Develops eddy currents under AC drive (Faraday induction). Lorentz force (J \u00D7 B) drives structured 3D flow around the core.',
+    role: 'Rotating conductor medium. Develops eddy currents under AC drive (Faraday induction). The Lorentz force (J × B) stirs it slowly when two pairs turn the field, and squeezes it without stirring when three pairs run at slightly different frequencies. Spun mechanically, its centre becomes the pressure minimum.',
     params: [
       '\u03C1 = 13,534 kg/m\u00B3',
       '\u03C3 = 1.04 \u00D7 10\u2076 S/m',
-      'T\u1D04 (SC) = 4.15 K',
-      'f_d (eddy peak) = 48.7 Hz',
+      'Freezes at −38.8 °C (superconducts only as a solid, Tᴄ = 4.15 K)',
+      '48.7 Hz: skin depth 7.1 cm, field fills the sphere',
     ],
     rigor: 'verified',
-    rigorNote: 'CRC Handbook values. Eddy peak confirmed exp 20 (within 3%)',
-  },
-  core: {
-    name: 'Lead Core (Pb)',
-    role: 'Dense inner mass. Floats in mercury (Pb lighter than Hg). Equilibrium position set by density-driven buoyancy vs. magnetic field gradient geometry. Potential superconductor anchor below 7.2 K.',
-    params: [
-      'r = 0.8 cm (1.6 cm dia)',
-      'm \u2248 24.3 g',
-      '\u03C1 = 11,340 kg/m\u00B3',
-      '\u0394\u03C1 from Hg = 2,194 kg/m\u00B3',
-      'Eq. position: 10.5 mm below center (3-axis)',
-      'T\u1D04 (SC) = 7.2 K',
-    ],
-    rigor: 'verified',
-    rigorNote: 'Equilibrium confirmed in clean rerun exp 1. Density-driven (Archimedes).',
+    rigorNote: 'CRC Handbook values. 48.7 Hz is where ωμ₀σR² = 1 in a lumped model; the exact sphere’s stirring torque per B² peaks near 566 Hz.',
   },
   energy: {
-    name: 'Energy Field (Visualization)',
-    role: 'Represents the EM field interaction zone around the core. In the physical device, this region contains the strongest eddy-current coupling and field gradients.',
+    name: 'Centre Glow (schematic)',
+    role: 'A visual marker, not a physical object. The applied field is uniform through the mercury to within 0.55 %, so there is no magnetic centre, and the induced currents are strongest near the wall. The centre matters for another reason: under the coils alone it is where the pressure is highest, and when the sphere is spun it is where the pressure is lowest.',
     params: [
-      'R = 2.5 cm',
-      'Peak coupling at f_d = 48.7 Hz',
-      'EM force ~1,000\u00D7 weaker than gravity at bench scale',
+      'Three equal pairs, slightly different frequencies: centre +0.09 Pa at 3 mT each, no flow',
+      'Spun sphere: centre reaches Hg vapour pressure near 19.5 rev/s (1 atm fill)',
+      'EM forces at full current: about 1/3,000 of the mercury’s weight',
     ],
-    rigor: 'model',
-    rigorNote: 'Force ratio from simulator exp 20. Region is real physics, visualization is schematic.',
+    rigor: 'verified',
+    rigorNote: 'Exact conducting-sphere and rotating-fluid results (October 2026 review). The glow itself is schematic.',
   },
   coil_z: {
     name: 'Z-Axis Helmholtz Pair (Blue)',
@@ -115,9 +102,11 @@ export const DOC_SECTIONS = [
     body: `
 <p>This page is a time capsule — sealed inside a 3D archive, linked from a portal hidden in the ceiling light. The model you're looking at is a bench-scale prototype of a device designed to test whether three-axis electromagnetic drive of a mercury sphere produces any measurable anomaly beyond standard physics predictions.</p>
 
-<p>Everything here is real engineering. Every claim is tagged with its rigor category: <span class="rigor-tag rigor-verified">Verified</span> means textbook physics, independently calculable. <span class="rigor-tag rigor-model">Model</span> means simulator prediction with known limitations. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> means untested — the point of building.</p>
+<p>Everything here is real engineering. Every claim is tagged with its rigor category: <span class="rigor-tag rigor-verified">Verified</span> means textbook physics, independently calculable. <span class="rigor-tag rigor-model">Model</span> means simulator prediction with known limitations. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> means untested — the point of building. <span class="rigor-tag rigor-circular">Circular</span> means an assumption that was reported as a result.</p>
 
-<p>The device exists at the intersection of magnetohydrodynamics, superconductivity, plasma physics, and a theoretical framework (Reciprocal System / Qualia Algebra) that maps device components to quaternion algebra. Whether that mapping has physical content is <em>the question this prototype is designed to answer.</em></p>
+<p class="correction-note"><strong>Corrected 14 October 2026.</strong> A re-run of the February simulator code found that three results this page called Verified were assumptions written into the code. The lead core is retired, because lead dissolves in mercury, and the cryogenic dynamo phase is retired, because mercury only superconducts when it is frozen. The corrections are made in place and listed under <em>Corrections</em> at the end.</p>
+
+<p>The device exists at the intersection of magnetohydrodynamics, rotating fluids, plasma physics, and a theoretical framework (Reciprocal System / Qualia Algebra) that maps device components to quaternion algebra. Whether that mapping has physical content is <em>the question this prototype is designed to answer.</em></p>
 
 <blockquote>The standard: would this analysis hold up to hostile peer review? If not, it's not ready to present as a finding.</blockquote>
     `,
@@ -126,27 +115,29 @@ export const DOC_SECTIONS = [
     title: 'What Is This?',
     open: false,
     body: `
-<p>A technological replica of Earth's core mechanism:</p>
+<p>A bench-scale model built on the template of Earth's core:</p>
 
 <table>
   <tr><th>Earth</th><th>Device</th></tr>
-  <tr><td>Solid iron inner core</td><td>Lead sphere (r=0.8 cm)</td></tr>
+  <tr><td>Solid iron inner core</td><td>No core in the first experiment. Spun, the sphere gathers anything lighter than mercury at its centre: an inside-out planet. A density-matched core is a later stage.</td></tr>
   <tr><td>Liquid iron outer core</td><td>Liquid mercury (R=5.0 cm sphere)</td></tr>
   <tr><td>Geomagnetic field (self-generated)</td><td>Three orthogonal Helmholtz coil pairs (applied)</td></tr>
-  <tr><td>Core convection + rotation</td><td>AC-driven eddy currents + Lorentz force</td></tr>
+  <tr><td>Core convection + rotation</td><td>AC-driven eddy currents + Lorentz force; mechanical spin</td></tr>
 </table>
 
-<p><strong>Operating principle</strong> (no exotic theory required): Three orthogonal AC Helmholtz coil pairs generate time-varying B-fields inside a sealed ceramic sphere filled with liquid mercury. The mercury develops eddy currents (Faraday induction) that couple to the fields via Lorentz force (J \u00D7 B). A lead core, denser than mercury, settles at an equilibrium determined by the balance between gravitational buoyancy and magnetic pressure. The three-axis field drives structured 3D flow in the mercury around the core.</p>
+<p><strong>Operating principle</strong> (no exotic theory required): Three orthogonal AC Helmholtz coil pairs generate time-varying B-fields inside a sealed ceramic sphere filled with liquid mercury. The mercury develops eddy currents (Faraday induction) that couple to the fields via Lorentz force (J × B). At the design field these forces are small and exactly calculable. Two pairs driven in quadrature turn the field and stir the mercury about once every 7–12 seconds. Three pairs at equal strength and slightly different frequencies squeeze it toward the centre (+0.09 Pa at 3 mT each) and stir nothing. Spinning the sealed sphere mechanically does what the coils cannot: the centre becomes the pressure minimum and reaches mercury's vapour pressure near 19.5 revolutions per second. <span class="rigor-tag rigor-verified">Verified</span></p>
+
+<p><strong>The coils-off test.</strong> Switch the coils off and every field in the mercury should be gone within about a millisecond (the sphere's magnetic decay time is 0.33 ms). A field still present 10 ms after the coil current reaches zero, above the mercury's own thermal noise, with no iron or other magnetic material nearby, would be anomalous. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> — the cleanest test in the program.</p>
 
 <p><strong>What kind of device is this, really?</strong> Strip the exotic framing and the base is an <em>MHD machine</em> — established, decades-old engineering. Moving a conductive fluid through a magnetic field generates electricity: that's a magnetohydrodynamic (MHD) generator, Faraday's law, real enough to hold patents since the 1960s (<a href="https://patents.google.com/patent/US3430081A/en" target="_blank" rel="noopener">US Patent 3,430,081</a> — mercury-vapor MHD generation). Run the same physics in reverse — fields driving the fluid instead of the fluid making power — and it's an MHD pump/accelerator. This device is that second kind: three orthogonal fields drive liquid mercury (intrinsic conductivity ~1.04 × 10⁶ S/m, no ionization required). Everything else here — the reference-frame question, the quaternion mapping — is layered on top of that ordinary, verifiable base. <span class="rigor-tag rigor-verified">Verified</span></p>
 
-<p><strong>Why three axes?</strong> A single axis drives 2D circulation. Two axes create a more complex pattern but still constrained. Three orthogonal axes — the minimum for full spatial coverage — allow the field to address every direction in 3D space. The simulator confirms: plasma Q<sub>3d</sub> \u2248 1.0 for three-axis drive, vs. 0.003 for single-axis. <span class="rigor-tag rigor-model">Model</span></p>
+<p><strong>Why three axes?</strong> The exact physics says three axes differ in kind, though not in the way the February simulator suggested. One axis pushes the mercury inward hardest around its equator and not at all along its own line; that lopsided push stirs it. Two axes are still lopsided and still stir. Three equal pairs at slightly different frequencies add up to a purely central squeeze that stirs nothing, because the directional parts cancel (Σ n̂n̂ = I). <span class="rigor-tag rigor-verified">Verified</span> In the plasma simulations, three-axis drive gave Q<sub>3d</sub> ≈ 1.0 against 0.003 for a single axis (single-particle physics, no collective effects). <span class="rigor-tag rigor-model">Model</span></p>
 
-<p><strong>Why Helmholtz pairs?</strong> Each axis is a <em>Helmholtz pair</em> — two coaxial coils spaced at exactly their radius (coils at ±R/2) — the standard laboratory geometry for a uniform field through the working volume (<a href="https://www.pnisensor.com/helmholtz-coil-design-applications-and-impact/" target="_blank" rel="noopener">PNI: Helmholtz Coil Design, Applications &amp; Impact</a>). At N=6 turns and 100 A this yields 2.4–3.9 mT per axis (X strongest, innermost), ~5.5 mT combined. <span class="rigor-tag rigor-verified">Verified</span></p>
+<p><strong>Why Helmholtz pairs?</strong> Each axis is a <em>Helmholtz pair</em> — two coaxial coils spaced at exactly their radius (coils at ±R/2) — the standard laboratory geometry for a uniform field through the working volume (<a href="https://www.pnisensor.com/helmholtz-coil-design-applications-and-impact/" target="_blank" rel="noopener">PNI: Helmholtz Coil Design, Applications &amp; Impact</a>). At N=6 turns and 100 A this yields 2.4–3.9 mT per axis (X strongest, innermost), ~5.5 mT combined. Inside the mercury the field is uniform to within 0.55 %, so there is no magnetic centre for anything to seek. <span class="rigor-tag rigor-verified">Verified</span></p>
 
-<p><strong>Why lead?</strong> Lead is the densest common element that floats in mercury (\u03C1<sub>Pb</sub> = 11,340 vs. \u03C1<sub>Hg</sub> = 13,534 kg/m\u00B3). It's also a superconductor below 7.2 K — relevant for the cryo-dynamo pathway. <span class="rigor-tag rigor-verified">Verified</span></p>
+<p><strong>Why no lead?</strong> The February design had a lead core. Lead dissolves in mercury (about 1.5–1.7 % by weight at room temperature), and a small lead ball in stirred mercury would be gone within hours. Lead is also lighter than mercury (11,340 vs. 13,534 kg/m³), so it floats. Metals that mercury does not dissolve include tungsten, tantalum, niobium, molybdenum, iron and stainless steel. <span class="rigor-tag rigor-verified">Verified</span></p>
 
-<p><strong>Why mercury?</strong> Highest room-temperature \u03C3 of any liquid metal (1.04 \u00D7 10\u2076 S/m). Also a superconductor — the first ever discovered (Kamerlingh Onnes, 1911, T\u1D04 = 4.15 K). Eddy-current coupling peaks at f<sub>d</sub> = 48.7 Hz for the 5 cm sphere. <span class="rigor-tag rigor-verified">Verified</span></p>
+<p><strong>Why mercury?</strong> It is the only metal that is liquid at room temperature without alloying, and it conducts well (1.04 × 10⁶ S/m). Gallium alloys such as Galinstan, and sodium–potassium (NaK), conduct about three times better. Mercury was also the first superconductor ever found (Kamerlingh Onnes, 1911, Tᴄ = 4.15 K), but only as a solid: it freezes at −38.8 °C, so superconducting mercury cannot flow. At 48.7 Hz the skin depth is 7.1 cm, so the field fills the 5 cm sphere. <span class="rigor-tag rigor-verified">Verified</span></p>
     `,
   },
   {
@@ -188,7 +179,7 @@ export const DOC_SECTIONS = [
 
 <table>
   <tr><th>Device</th><th>Quaternion</th><th>RS/RS2</th><th>Qualia Algebra</th></tr>
-  <tr><td>Lead core</td><td>Real axis (1)</td><td>Scalar magnitude</td><td>Observer [1,0,0,0]</td></tr>
+  <tr><td>Centre of the sphere (no core in the first experiment)</td><td>Real axis (1)</td><td>Scalar magnitude</td><td>Observer [1,0,0,0]</td></tr>
   <tr><td>X coils (red)</td><td>i</td><td>1D motion</td><td>Interest axis 1</td></tr>
   <tr><td>Y coils (green)</td><td>j</td><td>2D motion</td><td>Interest axis 2</td></tr>
   <tr><td>Z coils (blue)</td><td>k</td><td>3D motion</td><td>Interest axis 3</td></tr>
@@ -217,27 +208,27 @@ export const DOC_SECTIONS = [
 <table>
   <tr><th>Component</th><th>Material</th><th>Key Property</th><th>Rigor</th></tr>
   <tr><td>Sphere</td><td>Borosilicate glass / alumina ceramic</td><td>Insulating, Hg-resistant, vacuum-sealable</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Mercury fill</td><td>99.99% Hg, 7.03 kg</td><td>\u03C3 = 1.04\u00D710\u2076 S/m, \u03C1 = 13,534 kg/m\u00B3</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Core</td><td>99.9% Pb, 24.3 g</td><td>\u03C1 = 11,340 kg/m\u00B3, T\u1D04 = 7.2 K</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Mercury fill</td><td>99.99% Hg, 7.09 kg</td><td>σ = 1.04×10⁶ S/m, ρ = 13,534 kg/m³</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Core</td><td>None in the first experiment</td><td>Lead retired (dissolves in mercury). Later option: a density-matched core of a metal mercury does not dissolve</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Coils (×6 — 3 Helmholtz pairs)</td><td>4 AWG copper, 4-6 turns/coil</td><td>R = 14 / 18 / 22.5 cm, each pair at ±R/2</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
 </table>
 
 <p><strong>Key parameters</strong></p>
 <table>
   <tr><th>Parameter</th><th>Value</th><th>Rigor</th></tr>
-  <tr><td>Eddy-current peak (f<sub>d</sub>)</td><td>48.7 Hz</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Drive frequency where the field fills the sphere</td><td>48.7 Hz (skin depth 7.1 cm)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Skin depth at 50 Hz</td><td>7.0 cm (> sphere R)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Max B per axis (Helmholtz pair, N=6, 100A)</td><td>3.9 mT</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Max B (3-axis combined)</td><td>~5.5 mT</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Core eq. (3-axis)</td><td>10.5 mm below center</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Core eq. (2-axis)</td><td>15.7 mm below center</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Core eq. (1-axis)</td><td>31.6 mm below center</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Dynamo threshold (Rm<sub>crit</sub>)</td><td>\u224810</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Ambient Rm (5 cm Hg)</td><td>0.03 (300\u00D7 below)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>SC-Hg Rm (4.2 K)</td><td>~3,089</td><td><span class="rigor-tag rigor-model">Model</span></td></tr>
-  <tr><td>SC amplification</td><td>~856\u00D7</td><td><span class="rigor-tag rigor-model">Model</span></td></tr>
+  <tr><td>Field uniformity inside the mercury</td><td>within 0.55 % (no magnetic centre)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Stirring, two pairs in quadrature</td><td>0.5–0.9 rad/s (a turn every 7–12 s)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Squeeze, three equal pairs at slightly different frequencies</td><td>centre +0.09 Pa at 3 mT each, no flow</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Magnetic Reynolds number of the stirred mercury</td><td>≈ 0.0025</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Self-sustaining field (dynamo)</td><td>needs ~4,000× the stirred Rm: out of reach at this size</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Magnetic decay time after switch-off</td><td>0.33 ms</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Spin rate at which the centre reaches Hg vapour pressure (1 atm fill)</td><td>≈ 19.5 rev/s</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Plasma Q<sub>3d</sub> (3-axis)</td><td>\u22481.0</td><td><span class="rigor-tag rigor-model">Model</span></td></tr>
-  <tr><td>EM force vs gravity</td><td>~1,000\u00D7 weaker</td><td><span class="rigor-tag rigor-model">Model</span></td></tr>
+  <tr><td>EM force vs gravity, full current</td><td>~3,000× weaker (stirring force at the wall)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
 </table>
 
 <p><strong>What the simulator proved won't work</strong>:</p>
@@ -247,6 +238,14 @@ export const DOC_SECTIONS = [
   <li>RS frequency matching in MHD (sweeps flat without hardcoded boost) <span class="rigor-tag rigor-verified">Verified</span></li>
   <li>RS amplitude ratios affecting centering (spread < 0.012 mm = noise) <span class="rigor-tag rigor-verified">Verified</span></li>
 </ul>
+
+<p><strong>What the October 2026 review ruled out</strong>:</p>
+<ul>
+  <li>A bare lead core (lead dissolves in mercury) <span class="rigor-tag rigor-verified">Verified</span></li>
+  <li>A superconducting liquid: mercury superconducts only when frozen, so a cryogenic dynamo has nothing to stir <span class="rigor-tag rigor-verified">Verified</span></li>
+  <li>A self-sustaining field at this size (about 4,000× short) <span class="rigor-tag rigor-verified">Verified</span></li>
+  <li>Magnetic centring in Helmholtz wiring: the field is uniform, so it exerts no centring force on a small body <span class="rigor-tag rigor-verified">Verified</span></li>
+</ul>
     `,
   },
   {
@@ -254,15 +253,15 @@ export const DOC_SECTIONS = [
     open: false,
     body: `
 <div class="phase-card">
-  <div class="phase-title">Phase 1-2: Mercury MHD + Core Centering</div>
-  <div class="phase-cost">$8,500 \u2013 $30,000</div>
-  <div class="phase-desc">Validate that 3-axis EM fields drive structured flow in liquid mercury. Test core centering prediction (10.5 mm). Broad frequency sweep (5-200 Hz). Search for any weight anomaly on precision balance.</div>
+  <div class="phase-title">Phase 1-2: Coreless Mercury Sphere</div>
+  <div class="phase-cost">$8,500 – $30,000 (spin rig not included)</div>
+  <div class="phase-desc">Check the exact conventional predictions: stirring with two pairs in quadrature, the central squeeze with three equal pairs at slightly different frequencies, the swept axis, and the vapour void when the sealed sphere is spun near 19.5 rev/s. Run the coils-off test. Broad frequency sweep (5-200 Hz). Search for any weight anomaly on precision balance.</div>
 </div>
 
-<div class="phase-card">
-  <div class="phase-title">Phase 3: Dynamo Search (Cryogenic)</div>
-  <div class="phase-cost">+$13,000 \u2013 $38,000</div>
-  <div class="phase-desc">Cool to 4.2 K (SC mercury). Test for self-sustaining magnetic field. Simulator predicts Rm \u2248 3,089 and ~856\u00D7 amplification. Coils become control surfaces. This is the only viable classical dynamo path at bench scale.</div>
+<div class="phase-card phase-retired">
+  <div class="phase-title">Phase 3: Dynamo Search (Cryogenic) — retired October 2026</div>
+  <div class="phase-cost"><s>+$13,000 – $38,000</s></div>
+  <div class="phase-desc">Mercury superconducts only when frozen (it freezes at −38.8 °C; Tᴄ = 4.15 K), so there is no superconducting liquid to stir. The Rm ≈ 3,089 and ~856× figures came from the simulator's prescribed growth law, not from physics it computed. <span class="rigor-tag rigor-circular">Circular</span></div>
 </div>
 
 <div class="phase-card">
@@ -277,15 +276,15 @@ export const DOC_SECTIONS = [
   <div class="phase-desc">Ionize mercury via 150 kV\u20131 MV pulse. Compare plasma-state vs. liquid-state response to identical 3-axis drive. Plasma sustains 3D rotation that liquid cannot (Q<sub>3d</sub> \u2248 1.0 vs. viscous collapse). f<sub>d</sub> shifts to ~7,450 Hz.</div>
 </div>
 
-<p style="margin-top: 16px;"><strong>Full build (all phases): ~$36,000 \u2013 $153,000</strong></p>
-<p style="font-size: 12px; color: var(--text-dim);">Ranges reflect DIY/surplus vs. new commercial equipment. Phase 3 (cryo) and Phase 5 (HV) are independent upgrades.</p>
+<p style="margin-top: 16px;"><strong>Full build (phases 1–2, 4 and 5): ~$23,000 – $115,000</strong></p>
+<p style="font-size: 12px; color: var(--text-dim);">Ranges reflect DIY/surplus vs. new commercial equipment. Phase 5 (HV) is an independent upgrade. The retired cryogenic phase is excluded.</p>
 
 <p style="margin-top: 16px;"><strong>The five questions this prototype exists to answer:</strong></p>
 <ol>
   <li>Can EM-driven mercury produce measurable forces on a precision balance?</li>
   <li>Does any frequency produce coupling beyond textbook eddy-current predictions?</li>
-  <li>Does Pb exhibit anomalous magnetic behavior under pulsed EM (forced Cooper pairing)?</li>
-  <li>Does the cryo-dynamo path produce self-sustaining fields at bench scale?</li>
+  <li>Does any field persist after the coils are switched off (10 ms after the coil current reaches zero, above the mercury's own thermal noise)?</li>
+  <li>Does spinning the sealed sphere produce anything at its centre beyond the conventional vapour void and the light material it gathers?</li>
   <li>Does plasma-state mercury exhibit behavior distinct from liquid-state?</li>
 </ol>
     `,
@@ -294,30 +293,37 @@ export const DOC_SECTIONS = [
     title: 'Audit Trail',
     open: false,
     body: `
-<p>21 simulator experiments. Full circularity audit. Clean reruns of 4 key experiments. Honest accounting of what survived and what didn't.</p>
+<p>21 simulator experiments. Full circularity audit. Clean reruns of 4 key experiments. In October 2026, a second audit re-ran the February code itself. Honest accounting of what survived and what didn't.</p>
 
-<p><strong class="audit-verified">What IS real</strong> (survived audit, confirmed in clean reruns):</p>
+<p><strong class="audit-verified">What IS real</strong> (survived both audits):</p>
 <ul>
-  <li>Core centering = density-driven buoyancy (Archimedes) — clean reruns identical with/without RS mechanisms</li>
-  <li>Axis hierarchy (3>2>1) = field geometry, confirmed identical in clean rerun</li>
-  <li>Dynamo threshold Rm \u2248 10 = sharp transition, RS-independent</li>
-  <li>Eddy-current coupling peak at f<sub>d</sub> = 48.7 Hz — within 3% of textbook prediction</li>
   <li>3D plasma rotation (Q<sub>3d</sub> \u2248 1.0) = real PIC physics (Boris pusher verified)</li>
   <li>Cyclotron impossible at bench B = pencil math, Biot-Savart</li>
   <li>Faraday induction monotonic (\u221D f<sup>0.87</sup>) = real PIC, no resonance peak</li>
+  <li>No special frequencies and no special RS ratios (the February nulls stand)</li>
 </ul>
 
-<p><strong class="audit-circular">What was CIRCULAR</strong> (found and removed during audit):</p>
+<p><strong class="audit-circular">What was CIRCULAR</strong> (found and removed during the February audit):</p>
 <ul>
   <li>RS coupling factor — was hardcoded into simulator, then "confirmed" as output. Had ZERO effect on equilibrium when disabled.</li>
   <li>RS resonance boost — sigmoid function favoring RS-predicted frequencies. Frequency sweeps completely flat when removed.</li>
   <li>RS amplitude ratios — no special status found. Core centering identical across all configs (spread < 0.012 mm).</li>
 </ul>
 
+<p><strong class="audit-circular">What was CIRCULAR</strong> (found in October 2026; the February audit had listed these as real):</p>
+<ul>
+  <li>Core centering at 10.5 / 15.7 / 31.6 mm — buoyancy divided by an assumed spring that exists only with the claimed activation switched on, at 75 mT per pair (the written spec is 2.4–3.9 mT). With the activation off, the core rests on the wall. The code also placed the core above centre; this page said below.</li>
+  <li>Axis hierarchy (3>2>1) — the 1 : 1.5 : 3 ratio is one over the number of axes, applied to that assumed spring.</li>
+  <li>Dynamo threshold Rm ≈ 10 — a constant in the code; the "sharp transition" and the amplification figures follow from the prescribed growth law.</li>
+  <li>Ambient Rm ≈ 0.03 — the simulator's speed limit (0.5 m/s), not a computed flow. The stirred mercury's real value is about 0.0025.</li>
+  <li>"Eddy-current coupling peak at 48.7 Hz, within 3%" — the lumped model checked against its own formula. In the exact sphere solution, 48.7 Hz is where the field fills the sphere, and the stirring torque per B² peaks near 566 Hz.</li>
+</ul>
+
 <p><strong class="audit-hypothesis">What remains HYPOTHESIS</strong> (the point of building):</p>
 <ul>
-  <li>Forced Cooper pairing in lead via EM pulse</li>
+  <li>A field that persists after the coils are switched off</li>
   <li>Any anomalous weight/inertia effects</li>
+  <li>Anything at the centre of the spun sphere beyond the conventional void</li>
   <li>Plasma vs. liquid response to 3-axis drive</li>
   <li>Consciousness-EM coupling</li>
   <li>Reference frame decoupling</li>
@@ -326,7 +332,30 @@ export const DOC_SECTIONS = [
 <p><strong>The rigor standard</strong>:</p>
 <blockquote>A simulator that confirms RS theory by having RS theory baked in helps no one — it produces false confidence that could mislead others or waste resources on flawed designs. The standard: would this analysis hold up to hostile peer review?</blockquote>
 
-<p style="font-size: 11px; color: var(--text-dim); margin-top: 16px;">Prototype Spec v1.0 \u2014 2026-02-22 \u2014 Post-audit, post-clean-rerun. All circular findings identified and excluded.</p>
+<p style="font-size: 11px; color: var(--text-dim); margin-top: 16px;">Prototype Spec v1.0 — 2026-02-22 — Post-audit, post-clean-rerun. Corrected 2026-10-14 after a re-run of the February code: five more findings moved out of Verified, and two physical impossibilities removed (see Corrections).</p>
+    `,
+  },
+  {
+    title: 'Corrections (14 October 2026)',
+    open: false,
+    body: `
+<p>Every change made to this capsule on 14 October 2026, with the reason. The February text said each of these things; none of them should be relied on.</p>
+
+<table>
+  <tr><th>February claim</th><th>Was</th><th>Now</th></tr>
+  <tr><td>Core equilibrium 10.5 / 15.7 / 31.6 mm below center (3 / 2 / 1 axes)</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td><span class="rigor-tag rigor-circular">Circular</span> An assumed spring, with the claimed activation switched on, at 75 mT. The sign was also wrong: the code put the core above centre. Removed.</td></tr>
+  <tr><td>Axis hierarchy 3 > 2 > 1</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td><span class="rigor-tag rigor-circular">Circular</span> One over the number of axes, applied to the assumed spring. The exact physics: three equal pairs at slightly different frequencies give a pure squeeze that stirs nothing.</td></tr>
+  <tr><td>Dynamo threshold Rm ≈ 10</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td><span class="rigor-tag rigor-circular">Circular</span> A constant in the code. Removed.</td></tr>
+  <tr><td>Ambient Rm 0.03</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td>The simulator's speed limit. Corrected to ≈ 0.0025.</td></tr>
+  <tr><td>Eddy-current peak at 48.7 Hz</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td>A lumped-model property. Restated: at 48.7 Hz the skin depth is 7.1 cm and the field fills the sphere.</td></tr>
+  <tr><td>"Highest room-temperature σ of any liquid metal"</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td>Wrong. Galinstan and NaK conduct about three times better. Removed.</td></tr>
+  <tr><td>Lead core, 24.3 g, "denser than mercury"</td><td><span class="rigor-tag rigor-verified">Verified</span></td><td>Retired. Lead dissolves in mercury, and it is lighter than mercury, not denser. The 3D model no longer shows it.</td></tr>
+  <tr><td>Cryogenic dynamo: SC mercury at 4.2 K, Rm ≈ 3,089, ~856×</td><td><span class="rigor-tag rigor-model">Model</span></td><td>Retired. Mercury superconducts only when frozen; the figures came from the prescribed growth law.</td></tr>
+  <tr><td>"The three-axis field drives structured 3D flow around the core"</td><td>—</td><td>Three equal pairs at slightly different frequencies drive no flow at all; two pairs in quadrature stir slowly.</td></tr>
+  <tr><td>Questions 3 and 4 (forced Cooper pairing in lead; the cryo-dynamo)</td><td>—</td><td>Replaced by the coils-off test and the spun sphere's centre.</td></tr>
+</table>
+
+<p>Everything else in the capsule stands as written in February.</p>
     `,
   },
 ];

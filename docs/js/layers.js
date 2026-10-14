@@ -1,6 +1,6 @@
 // ===========================================================
 // layers.js — Toggle controls + raycaster interaction
-// 8 toggle groups, floating panel, click-to-inspect
+// 7 toggle groups, floating panel, click-to-inspect
 // ===========================================================
 
 import * as THREE from 'three';
@@ -11,8 +11,7 @@ import { COMPONENT_INFO } from './content.js';
 const LAYERS = [
   { id: 'shell',  label: 'Shell',   color: '#8090a0', meshNames: ['Acrylic_Sphere'] },
   { id: 'mercury', label: 'Mercury', color: '#c0c8d0', meshNames: ['Mercury'] },
-  { id: 'core',   label: 'Core',    color: '#4a4a50', meshNames: ['Pb_Core'] },
-  { id: 'energy', label: 'Energy',  color: '#3388ff', meshNames: ['Energy_Field'] },
+  { id: 'energy', label: 'Glow',    color: '#3388ff', meshNames: ['Energy_Field'] },
   { id: 'coil_z', label: 'Z Coils', color: '#3b64dd', meshNames: ['Coil_Z_A', 'Coil_Z_B'] },
   { id: 'coil_y', label: 'Y Coils', color: '#3bdd3b', meshNames: ['Coil_Y_A', 'Coil_Y_B'] },
   { id: 'coil_x', label: 'X Coils', color: '#dd3b3b', meshNames: ['Coil_X_A', 'Coil_X_B'] },
