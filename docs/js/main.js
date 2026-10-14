@@ -336,7 +336,7 @@ function renderDocs() {
 
   container.innerHTML = `
     <h1>Reference Frame Engine</h1>
-    <div class="subtitle">Bench-Scale Prototype \u2014 Spec v1.0 \u2014 2026-02-22 \u2014 corrected 2026-10-14</div>
+    <div class="subtitle">Bench-Scale Prototype \u2014 Spec v1.0 \u2014 <span style="white-space:nowrap">2026-02-22</span> \u2014 <span style="white-space:nowrap">corrected 2026-10-14</span></div>
   `;
 
   DOC_SECTIONS.forEach(section => {
