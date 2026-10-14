@@ -33,10 +33,10 @@ export const COMPONENT_INFO = {
   },
   energy: {
     name: 'Centre Glow (schematic)',
-    role: 'A visual marker, not a physical object. The applied field is uniform through the mercury to within 0.55 %, so there is no magnetic centre, and the induced currents are strongest near the wall. The centre matters for another reason: under the coils alone it is where the pressure is highest, and when the sphere is spun it is where the pressure is lowest.',
+    role: 'A visual marker, not a physical object. The applied field is uniform through the mercury to within 0.55 %, so there is no magnetic centre, and the induced currents are strongest near the wall. The centre matters for another reason: under the coils alone it is where the pressure is highest, and when the sphere is spun it sits on the line of lowest pressure, the spin axis.',
     params: [
       'Three equal pairs, slightly different frequencies: centre +0.09 Pa at 3 mT each, no flow',
-      'Spun sphere: centre reaches Hg vapour pressure near 19.5 rev/s (1 atm fill)',
+      'Spun sphere: the axis reaches Hg vapour pressure near 16–20 rev/s (1 atm fill)',
       'EM forces at full current: about 1/3,000 of the mercury’s weight',
     ],
     rigor: 'verified',
@@ -119,15 +119,15 @@ export const DOC_SECTIONS = [
 
 <table>
   <tr><th>Earth</th><th>Device</th></tr>
-  <tr><td>Solid iron inner core</td><td>No core in the first experiment. Spun, the sphere gathers anything lighter than mercury at its centre: an inside-out planet. A density-matched core is a later stage.</td></tr>
+  <tr><td>Solid iron inner core</td><td>No core in the first experiment. Spun, the sphere gathers anything lighter than mercury on its spin axis: an inside-out planet. A density-matched core is a later stage.</td></tr>
   <tr><td>Liquid iron outer core</td><td>Liquid mercury (R=5.0 cm sphere)</td></tr>
   <tr><td>Geomagnetic field (self-generated)</td><td>Three orthogonal Helmholtz coil pairs (applied)</td></tr>
   <tr><td>Core convection + rotation</td><td>AC-driven eddy currents + Lorentz force; mechanical spin</td></tr>
 </table>
 
-<p><strong>Operating principle</strong> (no exotic theory required): Three orthogonal AC Helmholtz coil pairs generate time-varying B-fields inside a sealed ceramic sphere filled with liquid mercury. The mercury develops eddy currents (Faraday induction) that couple to the fields via Lorentz force (J × B). At the design field these forces are small and exactly calculable. Two pairs driven in quadrature turn the field and stir the mercury about once every 7–12 seconds. Three pairs at equal strength and slightly different frequencies squeeze it toward the centre (+0.09 Pa at 3 mT each) and stir nothing. Spinning the sealed sphere mechanically does what the coils cannot: the centre becomes the pressure minimum and reaches mercury's vapour pressure near 19.5 revolutions per second. <span class="rigor-tag rigor-verified">Verified</span></p>
+<p><strong>Operating principle</strong> (no exotic theory required): Three orthogonal AC Helmholtz coil pairs generate time-varying B-fields inside a sealed ceramic sphere filled with liquid mercury. The mercury develops eddy currents (Faraday induction) that couple to the fields via Lorentz force (J × B). At the design field these forces are small and exactly calculable. Two pairs driven in quadrature turn the field and stir the mercury about once every 7–12 seconds. Three pairs at equal strength and slightly different frequencies squeeze it toward the centre (+0.09 Pa at 3 mT each) and stir nothing. Spinning the sealed sphere mechanically does what the coils cannot: the spin axis becomes the line of lowest pressure and, with the sphere filled at 1 atm, reaches mercury's vapour pressure at roughly 16–20 revolutions per second, depending on how much the shell gives and on temperature. <span class="rigor-tag rigor-verified">Verified</span></p>
 
-<p><strong>The coils-off test.</strong> Switch the coils off and every field in the mercury should be gone within about a millisecond (the sphere's magnetic decay time is 0.33 ms). A field still present 10 ms after the coil current reaches zero, above the mercury's own thermal noise, with no iron or other magnetic material nearby, would be anomalous. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> — the cleanest test in the program.</p>
+<p><strong>The coils-off test.</strong> Switch the coils off and every field in the mercury should be gone within about a millisecond (the sphere's magnetic decay time is 0.33 ms). A field still present 10 ms after the coil current reaches zero, above the mercury's own thermal noise, with the mercury at rest, the Earth's field cancelled and no iron or other magnetic material nearby, would be anomalous. <span class="rigor-tag rigor-hypothesis">Hypothesis</span> — the cleanest test in the program.</p>
 
 <p><strong>What kind of device is this, really?</strong> Strip the exotic framing and the base is an <em>MHD machine</em> — established, decades-old engineering. Moving a conductive fluid through a magnetic field generates electricity: that's a magnetohydrodynamic (MHD) generator, Faraday's law, real enough to hold patents since the 1960s (<a href="https://patents.google.com/patent/US3430081A/en" target="_blank" rel="noopener">US Patent 3,430,081</a> — mercury-vapor MHD generation). Run the same physics in reverse — fields driving the fluid instead of the fluid making power — and it's an MHD pump/accelerator. This device is that second kind: three orthogonal fields drive liquid mercury (intrinsic conductivity ~1.04 × 10⁶ S/m, no ionization required). Everything else here — the reference-frame question, the quaternion mapping — is layered on top of that ordinary, verifiable base. <span class="rigor-tag rigor-verified">Verified</span></p>
 
@@ -226,7 +226,7 @@ export const DOC_SECTIONS = [
   <tr><td>Magnetic Reynolds number of the stirred mercury</td><td>≈ 0.0025</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Self-sustaining field (dynamo)</td><td>needs ~4,000× the stirred Rm: out of reach at this size</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Magnetic decay time after switch-off</td><td>0.33 ms</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
-  <tr><td>Spin rate at which the centre reaches Hg vapour pressure (1 atm fill)</td><td>≈ 19.5 rev/s</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
+  <tr><td>Spin rate at which the spin axis reaches Hg vapour pressure (1 atm fill)</td><td>≈ 16–20 rev/s (the shell's give and the temperature set it)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
   <tr><td>Plasma Q<sub>3d</sub> (3-axis)</td><td>\u22481.0</td><td><span class="rigor-tag rigor-model">Model</span></td></tr>
   <tr><td>EM force vs gravity, full current</td><td>~3,000× weaker (stirring force at the wall)</td><td><span class="rigor-tag rigor-verified">Verified</span></td></tr>
 </table>
@@ -255,7 +255,7 @@ export const DOC_SECTIONS = [
 <div class="phase-card">
   <div class="phase-title">Phase 1-2: Coreless Mercury Sphere</div>
   <div class="phase-cost">$8,500 – $30,000 (spin rig not included)</div>
-  <div class="phase-desc">Check the exact conventional predictions: stirring with two pairs in quadrature, the central squeeze with three equal pairs at slightly different frequencies, the swept axis, and the vapour void when the sealed sphere is spun near 19.5 rev/s. Run the coils-off test. Broad frequency sweep (5-200 Hz). Search for any weight anomaly on precision balance.</div>
+  <div class="phase-desc">Check the exact conventional predictions: stirring with two pairs in quadrature, the central squeeze with three equal pairs at slightly different frequencies, the swept axis, and the vapour void when the sealed sphere is spun (about 16–20 rev/s at a 1 atm fill). Run the coils-off test. Broad frequency sweep (5-200 Hz). Search for any weight anomaly on precision balance.</div>
 </div>
 
 <div class="phase-card phase-retired">
@@ -284,7 +284,7 @@ export const DOC_SECTIONS = [
   <li>Can EM-driven mercury produce measurable forces on a precision balance?</li>
   <li>Does any frequency produce coupling beyond textbook eddy-current predictions?</li>
   <li>Does any field persist after the coils are switched off (10 ms after the coil current reaches zero, above the mercury's own thermal noise)?</li>
-  <li>Does spinning the sealed sphere produce anything at its centre beyond the conventional vapour void and the light material it gathers?</li>
+  <li>Does spinning the sealed sphere produce anything at its centre? Ordinary physics puts the vapour void and the light material it gathers on the spin axis, at its uphill end, and nothing at the centre itself.</li>
   <li>Does plasma-state mercury exhibit behavior distinct from liquid-state?</li>
 </ol>
     `,
@@ -323,7 +323,7 @@ export const DOC_SECTIONS = [
 <ul>
   <li>A field that persists after the coils are switched off</li>
   <li>Any anomalous weight/inertia effects</li>
-  <li>Anything at the centre of the spun sphere beyond the conventional void</li>
+  <li>Anything at the centre of the spun sphere (ordinary physics puts the void on the axis, not at the centre)</li>
   <li>Plasma vs. liquid response to 3-axis drive</li>
   <li>Consciousness-EM coupling</li>
   <li>Reference frame decoupling</li>
