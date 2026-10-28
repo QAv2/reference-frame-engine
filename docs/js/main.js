@@ -336,7 +336,7 @@ function renderDocs() {
 
   container.innerHTML = `
     <h1>Reference Frame Engine</h1>
-    <div class="subtitle">Bench-Scale Prototype \u2014 Spec v1.0 \u2014 <span style="white-space:nowrap">2026-02-22</span> \u2014 <span style="white-space:nowrap">corrected 2026-10-14</span></div>
+    <div class="subtitle">Bench-Scale Prototype \u2014 Spec v1.0 \u2014 <span style="white-space:nowrap">2026-02-22</span> \u2014 <span style="white-space:nowrap">corrected 2026-10-14</span> \u2014 <span class="rigor-tag rigor-superseded">Superseded</span> <a href="mercury-core/" target="_blank" rel="noopener" style="white-space:nowrap">continues in The Mercury Core \u2192</a></div>
   `;
 
   DOC_SECTIONS.forEach(section => {
@@ -370,6 +370,7 @@ async function playIntro() {
     { text: '', cls: '' },
     { text: `CAPSULE DATE: 2026-02-22`, cls: 'dim' },
     { text: `CORRECTED: 2026-10-14`, cls: 'dim' },
+    { text: `SUPERSEDED: 2026-10 \u2192 THE MERCURY CORE`, cls: 'dim' },
     { text: `ACCESSED: ${new Date().toISOString().split('T')[0]}`, cls: 'dim' },
     { text: '', cls: '' },
     { text: 'If you found this, you looked up.', cls: 'amber' },

@@ -217,6 +217,7 @@ html, body {
 .rigor-hypothesis  { background: rgba(255, 160, 64, 0.15); color: var(--hypothesis); border: 1px solid rgba(255, 160, 64, 0.3); }
 .rigor-circular    { background: rgba(255, 64, 64, 0.15); color: var(--circular); border: 1px solid rgba(255, 64, 64, 0.3); }
 .rigor-model       { background: rgba(96, 160, 255, 0.15); color: var(--model); border: 1px solid rgba(96, 160, 255, 0.3); }
+.rigor-superseded  { background: rgba(192, 200, 208, 0.08); color: var(--mercury); border: 1px dashed rgba(192, 200, 208, 0.45); }
 .rigor-untested    { background: rgba(136, 136, 136, 0.15); color: var(--untested); border: 1px solid rgba(136, 136, 136, 0.3); }
 
 /* --- Docs Sidebar --- */
@@ -247,6 +248,12 @@ html, body {
   color: var(--text-dim);
   margin-bottom: 24px;
 }
+#docs-content .subtitle a {
+  color: var(--mercury);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+#docs-content .subtitle a:hover { color: var(--text-bright); }
 
 details {
   margin-bottom: 2px;
@@ -376,6 +383,15 @@ details[open] > summary { border-bottom-color: var(--border); }
 }
 .phase-card.phase-retired .phase-title { color: var(--text-dim); }
 .phase-card.phase-retired .phase-cost { color: var(--text-dim); }
+
+/* Continuation notice (2026-10-28): the design moved on to The Mercury Core */
+.section-body .continuation-note {
+  border-left: 2px dashed var(--mercury);
+  background: rgba(192, 200, 208, 0.05);
+  padding: 8px 12px;
+  border-radius: 0 4px 4px 0;
+}
+.section-body .continuation-note a { color: var(--text-bright); }
 
 /* Correction notice (2026-10-14) */
 .section-body .correction-note {
