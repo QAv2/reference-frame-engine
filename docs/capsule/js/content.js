@@ -106,7 +106,7 @@ export const DOC_SECTIONS = [
 
 <p class="correction-note"><strong>Corrected 14 October 2026.</strong> A re-run of the February simulator code found that four results this page called Verified were assumptions written into the code, or read back out of it. The lead core is retired, because lead dissolves in mercury, and the cryogenic dynamo phase is retired, because mercury only superconducts when it is frozen. The corrections are made in place and listed under <em>Corrections</em> at the end.</p>
 
-<p class="continuation-note"><span class="rigor-tag rigor-superseded">Superseded</span> <strong>The device has moved on.</strong> In October 2026 the design was rebuilt from the physics up, as a coreless mercury sphere that is spun as well as driven, aimed at one result: a magnetic field that outlasts the coils that made it. That work continues in a new demonstration, <a href="mercury-core/" target="_blank" rel="noopener">The Mercury Core&nbsp;&rarr;</a> This capsule stays as it was sealed, with its corrections, as the record of where the device started.</p>
+<p class="continuation-note"><span class="rigor-tag rigor-superseded">Superseded</span> <strong>The device has moved on.</strong> In October 2026 the design was rebuilt from the physics up, as a coreless mercury sphere that is spun as well as driven, aimed at one result: a magnetic field that outlasts the coils that made it. That work continues in <a href="../">The Mercury Core&nbsp;&rarr;</a>, which now stands at the front of this site and opens from the ceiling portal. This capsule, its predecessor, stays as it was sealed, with its corrections, as the record of where the device started.</p>
 
 <p>The device exists at the intersection of magnetohydrodynamics, rotating fluids, plasma physics, and a theoretical framework (Reciprocal System / Qualia Algebra) that maps device components to quaternion algebra. Whether that mapping has physical content is <em>the question this prototype is designed to answer.</em></p>
 
@@ -365,7 +365,7 @@ export const DOC_SECTIONS = [
     title: 'Continuation: The Mercury Core (October 2026)',
     open: false,
     body: `
-<p><span class="rigor-tag rigor-superseded">Superseded</span> The design in this capsule is the first rung. The current design is in <a href="mercury-core/" target="_blank" rel="noopener"><strong>The Mercury Core</strong></a>, a step-through demonstration that holds the device to ordinary physics before anything is built. What changed:</p>
+<p><span class="rigor-tag rigor-superseded">Superseded</span> The design in this capsule is the first rung. The current design is in <a href="../"><strong>The Mercury Core</strong></a>, a step-through demonstration that holds the device to ordinary physics before anything is built. What changed:</p>
 <ul>
   <li><strong>No core.</strong> The sphere is mercury and nothing in it. The lead core is gone, and a core of another metal is a later stage.</li>
   <li><strong>Two pairs stir, three pairs stop the stirring.</strong> Three equal coil pairs at slightly different frequencies give a pure squeeze, so the axis count is now a switch for flow rather than a ranking.</li>
